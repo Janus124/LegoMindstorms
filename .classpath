@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="JMALX3/src"/>
+	<classpathentry kind="src" path="Rennen/src"/>
+	<classpathentry kind="lib" path="Rennen/A180DegreeDrift.jar"/>
+	<classpathentry kind="lib" path="Rennen/helloWorld.jar"/>
+	<classpathentry kind="lib" path="Rennen/LangsamAberFunktioniert.jar"/>
+	<classpathentry kind="lib" path="Rennen/MJ.jar"/>
+	<classpathentry kind="lib" path="Rennen/stayCloseToWall.jar"/>
+	<classpathentry kind="lib" path="Rennen/TravelArc.jar"/>
+	<classpathentry kind="output" path="JMALX3/bin"/>
+</classpath>
