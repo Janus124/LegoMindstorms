@@ -25,19 +25,14 @@ public class A180DegreeDrift {
 		Button.waitForAnyPress();
 		
 		int turnCounter = 0;
-		int maxSpeed = 150;
+		int maxSpeed = 300;
 		
 		//Create Motor & Sensor for Ultraschall
 		RegulatedMotor motorRight = new EV3LargeRegulatedMotor(MotorPort.B);
-		motorRight.forward();
-		
 		RegulatedMotor motorLeft = new EV3LargeRegulatedMotor(MotorPort.C);
-		motorLeft.forward();
 		
 		EV3UltrasonicSensor sensorForward = new EV3UltrasonicSensor(SensorPort.S1);
 		EV3UltrasonicSensor sensorRight = new EV3UltrasonicSensor(SensorPort.S2);
-		
-		
 		
 		RangeFinder sonarForward = new RangeFinderAdapter(sensorForward);
 		RangeFinder sonarRight = new RangeFinderAdapter(sensorRight);
@@ -48,10 +43,15 @@ public class A180DegreeDrift {
 		
 		//Rotate
 		//Drehen mit default-offset-wert = 10
-		Wheel wheelL = WheeledChassis.modelWheel(motorLeft, 80).offset(10);
-		Wheel wheelR = WheeledChassis.modelWheel(motorRight, 80).offset(-10);
+		Wheel wheelL = WheeledChassis.modelWheel(motorLeft, 80).offset(15);
+		Wheel wheelR = WheeledChassis.modelWheel(motorRight, 80).offset(-15);
 		WheeledChassis chassis = new WheeledChassis(new Wheel[] {wheelL, wheelR}, WheeledChassis.TYPE_DIFFERENTIAL);
 		MovePilot pilot = new MovePilot(chassis);
+		
+		pilot.setAngularSpeed(maxSpeed);
+		
+		motorRight.forward();
+		motorLeft.forward();
 		
 		//best value 1400
 		while(Button.getButtons() == 0) {
@@ -61,54 +61,55 @@ public class A180DegreeDrift {
 			
 			if (turnCounter == 2) {
 				//long wall with bin
-				 if(10 <= distanceValueR && distanceValueR <= 15) {
+				 if(10 <= distanceValueR && distanceValueR <= 25) {
 					MoveForward( motorRight, motorLeft, maxSpeed);
-				} else if(distanceValueR >= 15) {
+				} else if(distanceValueR >= 25) {
 					//turn right 
 					motorRight.startSynchronization();
-					motorRight.setSpeed(maxSpeed -30);
-					motorLeft.setSpeed(maxSpeed);
+					pilot.setLinearSpeed(50);  // cm per second
+					pilot.rotate(-30);   
+					pilot.travel(50);         // cm
 					motorRight.endSynchronization();
 				} else if(distanceValueR <= 10 || distanceValueF <= 15) {
 					//turn left & handle bin
 					motorRight.startSynchronization();
-					motorRight.setSpeed(maxSpeed);
-					motorLeft.setSpeed(maxSpeed -30);
+					pilot.setLinearSpeed(50);  // cm per second
+					pilot.rotate(30);
+					pilot.travel(50);  
 					motorRight.endSynchronization();
 				}
 				
-			}else if(10 <= distanceValueR && distanceValueR <= 15) {
+			}else if(10 <= distanceValueR && distanceValueR <= 25) {
 				MoveForward( motorRight, motorLeft, maxSpeed);
-			} else if(distanceValueR >= 15 && distanceValueR <= 25) {
+			} else if(distanceValueR >= 25 && distanceValueR <= 35) {
 				//turn right 
 				motorRight.startSynchronization();
-				motorRight.setSpeed(maxSpeed -30);
-				motorLeft.setSpeed(maxSpeed);
+				pilot.setLinearSpeed(50);  // cm per second
+				pilot.rotate(-30);   
+				pilot.travel(50);         // cm
 				motorRight.endSynchronization();
 			} else if(distanceValueR <= 10) {
 				//turn left
 				motorRight.startSynchronization();
-				motorRight.setSpeed(maxSpeed);
-				motorLeft.setSpeed(maxSpeed -30);
+				pilot.setLinearSpeed(50);  // cm per second
+				pilot.rotate(30);
+				pilot.travel(50);         // cm
 				motorRight.endSynchronization();
-			} else if (distanceValueR > 25) {
+			} else if (distanceValueR > 35 || Float.isInfinite(distanceValueR)) {
 				//180° kurve
 				//turn right 
-				MoveForward( motorRight, motorLeft, maxSpeed / 2);				
-				Delay.msDelay(100);
 				
-				MoveForward( motorRight, motorLeft, 0);				
-				Delay.msDelay(100);
+				//90°
+				pilot.setLinearSpeed(50);  // cm per second
+				pilot.rotateRight();
+				pilot.travel(50);   
 				
-				pilot.rotate(90);
-				
-				MoveForward( motorRight, motorLeft, maxSpeed / 2);	
-				
-				Delay.msDelay(1000);
-				
-				pilot.rotate(100);
+				//90°
+				pilot.rotate(-100);
+				pilot.travel(50); 
 				
 				turnCounter++;
+				System.out.println("Turns: " + turnCounter);
 				
 			}
 		}

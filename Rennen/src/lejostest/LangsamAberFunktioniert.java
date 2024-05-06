@@ -17,31 +17,35 @@ import lejos.robotics.chassis.WheeledChassis;
 import lejos.robotics.chassis.Wheel;
 import lejos.robotics.navigation.MovePilot;
 
-public class stayCloseToWall {
+public class LangsamAberFunktioniert {
 
 	public static void main(String[] args) {
+		
+		//Create Motor & Sensor for Ultraschall
+		RegulatedMotor motorRight = new EV3LargeRegulatedMotor(MotorPort.B);
+		RegulatedMotor motorLeft = new EV3LargeRegulatedMotor(MotorPort.C);
+		
+		//worked with 650
+		int maxSpeed = 650;
+		//(int) motorRight.getMaxSpeed();
+		
+		System.out.println(maxSpeed);
+		
+		EV3UltrasonicSensor sensorForward = new EV3UltrasonicSensor(SensorPort.S1);
+		EV3UltrasonicSensor sensorRight = new EV3UltrasonicSensor(SensorPort.S2);
+		
+		RangeFinder sonarForward = new RangeFinderAdapter(sensorForward);
+		RangeFinder sonarRight = new RangeFinderAdapter(sensorRight);
 		
 		System.out.println("Press any button to start");
 		Button.waitForAnyPress();
 		
-		int maxSpeed = 300;
-		
-		//Create Motor & Sensor for Ultraschall
-		RegulatedMotor motorRight = new EV3LargeRegulatedMotor(MotorPort.B);
-		motorRight.forward();
-		
-		RegulatedMotor motorLeft = new EV3LargeRegulatedMotor(MotorPort.C);
-		motorLeft.forward();
-		
-		//EV3UltrasonicSensor sensorForward = new EV3UltrasonicSensor(SensorPort.S1);
-		EV3UltrasonicSensor sensorRight = new EV3UltrasonicSensor(SensorPort.S2);
-		
-		//RangeFinder sonarForward = new RangeFinderAdapter(sensorForward);
-		RangeFinder sonarRight = new RangeFinderAdapter(sensorRight);
-		
 		RegulatedMotor[] syncList = {motorLeft};
 		
 		motorRight.synchronizeWith(syncList);
+		
+		motorRight.forward();
+		motorLeft.forward();
 		
 		motorRight.startSynchronization();
 		motorRight.setSpeed(maxSpeed);
@@ -51,29 +55,51 @@ public class stayCloseToWall {
 		//best value 1400
 		while(Button.getButtons() == 0) {
 		
-			//float distanceValueF = sonarForward.getRange();
+			float distanceValueF = sonarForward.getRange();
 			float distanceValueR = sonarRight.getRange();
 			
-			System.out.println("Sensor: " + distanceValueR);
+			System.out.println("Sensor right: " + distanceValueR);
+			//System.out.println("Sensor forward: " + distanceValueF);
 			
-			if(10 <= distanceValueR && distanceValueR <= 15) {
+			if(distanceValueF <= 30) {
+				//turn left avoid wall
+				motorRight.startSynchronization();
+				motorRight.setSpeed(maxSpeed);
+				//worked with -225
+				motorLeft.setSpeed(maxSpeed -225);
+				motorRight.endSynchronization();
+			}else if(20 <= distanceValueR && distanceValueR <= 50) {
+				//forward full speed
 				motorRight.startSynchronization();
 				motorRight.setSpeed(maxSpeed);
 				motorLeft.setSpeed(maxSpeed);
 				motorRight.endSynchronization();
-			} else if(distanceValueR >= 15) {
-				//turn right 
+			} else if(Float.isInfinite(distanceValueR)){
+				//turn right door
 				motorRight.startSynchronization();
-				motorRight.setSpeed(maxSpeed -200);
+				//worked with -225
+				motorRight.setSpeed(maxSpeed -225);
 				motorLeft.setSpeed(maxSpeed);
 				motorRight.endSynchronization();
-			} else if(distanceValueR <= 10) {
-				//turn left
+			} else if(distanceValueR >= 50) {
+				//turn right light
+				motorRight.startSynchronization();
+				//worked with -50
+				motorRight.setSpeed(maxSpeed -50);
+				motorLeft.setSpeed(maxSpeed);
+				motorRight.endSynchronization();
+			}else if(distanceValueR <= 20) {
+				//turn left light
 				motorRight.startSynchronization();
 				motorRight.setSpeed(maxSpeed);
-				motorLeft.setSpeed(maxSpeed -200);
+				//worked with -50
+				motorLeft.setSpeed(maxSpeed -50);
 				motorRight.endSynchronization();
 			}
+			//best time: 0:53:00 min
+			
+			//TODO: Abstand zu Wand anpassen für F & R, differenzieren zw. F ist nah = fährt frontal auf wand und R ist nah, nur leicht korrigieren
+
 		}
 		
 		motorRight.startSynchronization();
@@ -82,4 +108,5 @@ public class stayCloseToWall {
 		motorRight.endSynchronization();
 		
 	}
+	
 }
