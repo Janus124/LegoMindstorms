@@ -1,0 +1,8 @@
+in Terminal:
+module load eclipse
+eclipse
+
+in Eclipse:
+File/Import/General/Existing Projects into Workspace
+
+rechtklick auf projekt/Properties -> Java Compiler -> enable project specific settings -> Java 1.7
