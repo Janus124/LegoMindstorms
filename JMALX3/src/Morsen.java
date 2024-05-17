@@ -2,9 +2,6 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
 
-import lejos.hardware.port.SensorPort;
-import lejos.hardware.sensor.EV3TouchSensor;
-
 public class Morsen {
 	public static void main(String[] args) {
 		//storage structure
