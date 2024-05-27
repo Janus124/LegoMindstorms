@@ -28,7 +28,7 @@ public class TestInput {
 	static long maxShortPress = unit;
 	static long maxLongPress = 3 * unit;
 
-	static long minTime = 
+	static long minTime = 0;
 
 	public static void main(String[] args) {
 		System.out.println("starting");
