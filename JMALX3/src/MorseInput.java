@@ -32,7 +32,7 @@ public class MorseInput {
     // w -> very long pause (7 units)
 
     // Time definitions in milliseconds
-    static long unit = 600;
+    static long unit = 1000;
     static long ShortPress = unit;
     static long LongPress = 3 * unit;
 
@@ -40,25 +40,25 @@ public class MorseInput {
     static long pauseLetter = 3 * unit;
     static long pauseWord = 7 * unit;
 
-    static long tolerance = unit / 2;
+    static long tolerance = unit; //ToDo anpassen
 
     public static void main(String[] args) {
-        GetInput();
-
+        GetInput();       	
+       	Delay.msDelay(5000);
 
     }
 
 	//gets the input from the EV3 Touch Sensor and computes the duration of the time, when the sensor is pushed and paused 
     public static void GetInput() {
         System.out.println("Starting");
+        long start_press;
+        long finish_press;
+
+        long start_pause = System.currentTimeMillis();
+        long finish_pause;
+
         while (true) {
-            long start_press;
-            long finish_press;
 
-            long start_pause;
-            long finish_pause;
-
-            start_pause = System.currentTimeMillis();
 
             if (adapter.isPressed()) {
                 // Sensor is pressed, measure time
@@ -70,7 +70,7 @@ public class MorseInput {
                 	return;
                 }
 
-                System.out.print("Pressed");
+                //System.out.print("Pressed");
                 start_press = System.currentTimeMillis();
 
                 while (true) {
@@ -82,12 +82,13 @@ public class MorseInput {
                 }
                 // Calculate pressed duration
                 long time_pressed = finish_press - start_press;
-                System.out.println(time_pressed);
+                //System.out.println(time_pressed);
 
 
                 if(HandleInput("pressed", time_pressed) == 0) {
                 	return;
                 }
+                start_pause = System.currentTimeMillis();
             }
         }
     }
@@ -99,9 +100,9 @@ public class MorseInput {
     //0 end
     //1 continue
     public static int HandleInput(String type, long time) {
-
-
-/*        if (type.equals("pause")) {
+    	System.out.println(type + ": " + time + ", " + morseWord);
+    	
+    	if (type.equals("pause")) {
             if (LongInRadius(time, pauseSymbol)) {
                 morseWord += "s";
 
@@ -110,6 +111,7 @@ public class MorseInput {
                 String letter = morseWord;
                 letter.replace("s", "");
                 normalWord += translate(letter);
+            	System.out.println("letter finished: " + translate(letter));
                 morseWord = "";
 
             } else if (LongInRadius(time, pauseWord)) {
@@ -118,39 +120,41 @@ public class MorseInput {
             		//end start translation
 
             		//normalWords.add(normalLetters);
-            		normalLetters = "";
+            		morseWord = "";
                     normalWord = "";
             		return 0;
             	}
-
+            	System.out.println("Word finished: " + normalWord);
                 normalWordArray.add(normalWord);
             	/*
             	if(currWord.length() == 7 || currWord.length() >= 9 || (currWord.length() == 8 && currWord != "remove")) {
             		System.out.println("Error: wrong type");
             	}
-            	//kommentar zu
+            	*/
                 normalWord = "";
                 morseWord = "";
             } else {
-                System.out.println("Error: wrong time in HandleInput pause");
+                System.out.println("Error 1");
                 return -1;
             }
         } else if (type.equals("pressed")) {
             if (LongInRadius(time, ShortPress)) {
+            	System.out.println("shortPress");
                 // Dot
                 morseWord += ".";
             } else if (LongInRadius(time, LongPress)) {
                 // Dash
+            	System.out.println("long press");
                 morseWord += "-";
             } else {
-                System.out.println("Error: wrong time in HandleInput pressed");
-                return -1;
+                //System.out.println("Error: wrong time in HandleInput pressed");
+                
             }
         } else {
             System.out.println("Error: wrong type");
             return -1;
         }
-        */
+        
         return 1;
     }
 
@@ -173,9 +177,10 @@ public class MorseInput {
         int idx = Arrays.asList(morse).indexOf(letter);
         if(idx == -1) {
             System.out.println("Error translation: no idx");
+            return "";
         } else {
             return language[idx];
-        }
-		
+        }		
 	}
+	
 }
