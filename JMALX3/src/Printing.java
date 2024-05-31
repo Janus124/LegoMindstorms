@@ -298,12 +298,14 @@ public class Printing {
 	}
 	
 	public static void setPen() {
+
 		motorZ.rotate(80);
 		Delay.msDelay(1000);
 		motorZ.stop();
 	}
 	
 	private static void liftPen() {
+
 		motorZ.rotate(-80);
 		Delay.msDelay(1000);
 		motorZ.stop();
