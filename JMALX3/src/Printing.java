@@ -1,14 +1,159 @@
 import java.util.Deque;
 
+import lejos.hardware.Button;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.MotorPort;
+import lejos.hardware.port.SensorPort;
+import lejos.hardware.sensor.EV3ColorSensor;
+import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.robotics.RegulatedMotor;
 import lejos.utility.Delay;
+import lejos.robotics.TouchAdapter;
+import lejos.robotics.Color;
+import lejos.robotics.ColorAdapter;
 
 public class Printing {
 	
-	public static void startPrinting(Deque<String> deque) {
+	public static void main(String[] args) {
+		//move pen on x-axis
+		EV3LargeRegulatedMotor motorX = new EV3LargeRegulatedMotor(MotorPort.A);
+		//move paper
+		EV3LargeRegulatedMotor motorY = new EV3LargeRegulatedMotor(MotorPort.B);
+		//move pem on z-axis
+		EV3MediumRegulatedMotor motorZ = new EV3MediumRegulatedMotor(MotorPort.C);
+		
+		//to calibrate pen in 0 on x-axis
+		EV3TouchSensor touchSensor = new EV3TouchSensor(SensorPort.S1);
+		TouchAdapter penAdapter = new TouchAdapter(touchSensor);
+		
+		EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S2);
+		ColorAdapter paperVisibleAdapter = new ColorAdapter(colorSensor);
+		
+		/*while(true) {
+			int i = paperVisibleAdapter.getColorID();
+			System.out.println(i);
+		}*/
+
+		
+		Printing print = new Printing();
+		
+		//print.setPen(motorZ);
+		//rotate left with minus degree
+		//right plus degree
+		//4 Umdrehungen
+		//motorX.rotate(-1440);
+		//Delay.msDelay(5000);
+		
+		//positiv ist hinten
+		//negativ vorne
+		//motorY.rotate(360);
+		//
+		
+		//print.liftPen(motorZ);
+		
+		while(true) {
+			int i = paperVisibleAdapter.getColorID();
+			System.out.println(i);
+			
+			if(2 > i || i >= 7) {
+				motorY.stop();
+				break;
+			}
+			
+			//move paper backwards
+			if(Button.UP.isDown()) {
+				motorY.forward();
+				Delay.msDelay(1000);
+			}
+			
+			if(Button.DOWN.isDown()) {
+				motorY.backward();
+				Delay.msDelay(1000);
+			}
+			
+		}
+		
+		Delay.msDelay(5000);
+		
+		motorY.rotate(180);
+		Delay.msDelay(5000);
+		
+		motorY.rotate(-1980);
+		Delay.msDelay(5000);
+		
+		/*
+		while(true) {
+			int i = paperVisibleAdapter.getColorID();
+			System.out.println(i);
+			
+			if(2 > i || i >= 7) {
+				break;
+			}
+			
+			//move paper backwards
+			if(Button.RIGHT.isDown()) {
+				motorX.forward();
+			}
+			
+			if(Button.LEFT.isDown()) {
+				motorX.backward();
+				Delay.msDelay(500);
+			}
+			
+			//move paper backwards
+			if(Button.UP.isDown()) {
+				motorY.forward();
+				Delay.msDelay(1000);
+			}
+			
+			if(Button.DOWN.isDown()) {
+				motorY.backward();
+				Delay.msDelay(1000);
+			}
+			
+			if(penAdapter.isPressed()) {
+				motorX.stop();
+			}
+			
+			
+		}*/
+
+		/*eigene methode
+
+		int i = 0;
+		while(i<5) {
+			motorZ.rotateTo(90);
+			System.out.println("rotate");
+			i++;
+		}*/
+
+		
+
+		
+		/*while(true) {
+			//move paper backwards
+			if(Button.UP.isDown()) {
+				motorY.forward();
+				Delay.msDelay(1000);
+			}
+			
+			if(Button.DOWN.isDown()) {
+				motorY.backward();
+				Delay.msDelay(1000);
+			}
+		}*/
+		
+		//Delay.msDelay(1000);
+		//motorX.setSpeed(50);
+		//motorZ.setSpeed(50);
+		
+		motorY.stop();
+		motorX.stop();
+		//motorZ.stop();
+	}
+	
+	public static void startPrinting(String[] words) {
 		float speedX = 50;
 		float speedY = 50;
 		float speedZ = 50;
@@ -185,12 +330,14 @@ public class Printing {
 	}
 	
 	public void setPen(EV3MediumRegulatedMotor motorZ) {
-		motorZ.setSpeed(50);
+		motorZ.rotate(80);
+		Delay.msDelay(1000);
 		motorZ.stop();
 	}
 	
 	private void liftPen(EV3MediumRegulatedMotor motorZ) {
-		motorZ.setSpeed(-50);
+		motorZ.rotate(-80);
+		Delay.msDelay(1000);
 		motorZ.stop();
 	}
 	
