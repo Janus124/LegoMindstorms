@@ -29,8 +29,8 @@ public class Printing {
 	
 	public static void main(String[] args) {
 		//liftPen();
-		startPrinting("Hallo");
-		
+		String[] a = new String[2];
+		startPrinting(a);
 		
 		/*
 		
@@ -68,76 +68,91 @@ public class Printing {
 	}
 	
 	public static void initialize() {
+		//-------- SYNC MOTOR X and Y -------- //
+		
+		EV3LargeRegulatedMotor[] syncList = {motorX};
+		motorY.synchronizeWith(syncList);
+		
 		//-------- START FEEDING SHEET INTO PRINTER -------- //
 		
-			System.out.println("Press UP for forward.");
-			System.out.println("Press DOWN for backward.");
-			System.out.println("Press Enter when done.");
+		System.out.println("Press UP for forward.");
+		System.out.println("Press DOWN for backward.");
+		System.out.println("Press Enter when done.");
+		
+		while(true) {
 			
-			while(true) {
-				
-				//sheet is fed well into printer, start reaching start position
-				if(Button.ENTER.isDown()) {
-					motorY.stop();
-					break;
-				}
-				
-				//move paper backwards
-				if(Button.UP.isDown()) {
-					motorY.forward();
-					Delay.msDelay(1000);
-				}
-				
-				//move paper forward
-				if(Button.DOWN.isDown()) {
-					motorY.backward();
-					Delay.msDelay(1000);
-				}
-				
+			//sheet is fed well into printer, start reaching start position
+			if(Button.ENTER.isDown()) {
+				motorY.stop();
+				break;
 			}
 			
-			// -------- START REACHING START POSITION -------- //
-			motorY.forward();
-			
-			while(true) {
-				
-				int i = paperVisibleAdapter.getColorID();
-				
-				if(i <= 2 || i >= 7) {
-					motorY.stop();
-					break;
-				}
+			//move paper backwards
+			if(Button.UP.isDown()) {
+				motorY.forward();
+				Delay.msDelay(1000);
 			}
 			
-			Delay.msDelay(3000);
-			
-			//Gehe auf richtige Höhe bei Initializierung
-			//Move sheet backwards
-			motorY.rotate(180);
-			Delay.msDelay(3000);
-			
-			//Move to the right
-			motorX.forward();
-			
-			while(true) {
-				if(penAdapter.isPressed()) {
-					motorX.stop();
-					break;
-				}
+			//move paper forward
+			if(Button.DOWN.isDown()) {
+				motorY.backward();
+				Delay.msDelay(1000);
 			}
-	
-			// -------- STOP MOTOR -------- //
 			
-			motorY.stop();
-			motorX.stop();
+		}
+		
+		// -------- START REACHING START POSITION -------- //
+		motorY.forward();
+		
+		while(true) {
+			
+			int i = paperVisibleAdapter.getColorID();
+			
+			if(i <= 2 || i >= 7) {
+				motorY.stop();
+				break;
+			}
+		}
+		
+		Delay.msDelay(3000);
+		
+		//Gehe auf richtige Höhe bei Initializierung
+		//Move sheet backwards
+		motorY.rotate(180);
+		Delay.msDelay(3000);
+		
+		//Move to the right
+		motorX.forward();
+		
+		while(true) {
+			if(penAdapter.isPressed()) {
+				motorX.stop();
+				break;
+			}
+		}
+
+		// -------- STOP MOTOR -------- //
+		
+		motorY.stop();
+		motorX.stop();
 	}
 	
-	public static void startPrinting(String words) {
+	public static void startPrinting(String[] words) {
 		
 		char inputLetter;
 		
 		initialize();
 		
+		setPen();
+		
+		//links
+		motorX.rotate(-90);
+		//hinten
+		motorY.rotate(-90);
+		//rechts
+		motorX.rotate(90);
+		//vorne
+		motorY.rotate(90);
 		/*while(inputQueue.peek() != null) {
 			//remove letter from queues and print it
 			inputLetter = inputQueue.poll();
@@ -146,7 +161,7 @@ public class Printing {
 		
 	}
 	
-	public void printLetter(char a) {
+	public static void printLetter(char a) {
 		switch(a) {
 		case 1:
 			printA();
@@ -299,14 +314,14 @@ public class Printing {
 	
 	public static void setPen() {
 
-		motorZ.rotate(80);
+		motorZ.rotate(180);
 		Delay.msDelay(1000);
 		motorZ.stop();
 	}
 	
 	private static void liftPen() {
 
-		motorZ.rotate(-80);
+		motorZ.rotate(-180);
 		Delay.msDelay(1000);
 		motorZ.stop();
 	}
@@ -314,187 +329,187 @@ public class Printing {
 	// --------------- PRINT LETTER FUNCTIONS --------------- //
 	// Prints the letter given by the morse code input        //
 	
-	private void printA() {
+	private static void printA() {
 		
 	}
 	
-	private void printB() {
+	private static void printB() {
 		
 	}
 	
-	private void printC() {
+	private static void printC() {
 		
 	}
 	
-	private void printD() {
+	private static void printD() {
 		
 	}
 	
-	private void printE() {
+	private static void printE() {
 		
 	}
 	
-	private void printF() {
+	private static void printF() {
 		
 	}
 	
-	private void printG() {
+	private static void printG() {
 		
 	}
 	
-	private void printH() {
+	private static void printH() {
 		
 	}
 	
-	private void printI() {
+	private static void printI() {
 		
 	}
 	
-	private void printJ() {
+	private static void printJ() {
 		
 	}
 	
-	private void printK() {
+	private static void printK() {
 		
 	}
 	
-	private void printL() {
+	private static void printL() {
 		
 	}
 	
-	private void printM() {
+	private static void printM() {
 		
 	}
 	
-	private void printN() {
+	private static void printN() {
 		
 	}
 
-	private void printO() {
+	private static void printO() {
 		
 	}
 	
-	private void printP() {
+	private static void printP() {
 		
 	}
 	
-	private void printQ() {
+	private static void printQ() {
 		
 	}
 	
-	private void printR() {
+	private static void printR() {
 		
 	}
 	
-	private void printS() {
+	private static void printS() {
 		
 	}
 	
-	private void printT() {
+	private static void printT() {
 		
 	}
 	
-	private void printU() {
+	private static void printU() {
 		
 	}
 	
-	private void printV() {
+	private static void printV() {
 		
 	}
 	
-	private void printW() {
+	private static void printW() {
 		
 	}
 	
-	private void printX() {
+	private static void printX() {
 		
 	}
 
-	private void printY() {
+	private static void printY() {
 		
 	}
 	
-	private void printZ() {
+	private static void printZ() {
 		
 	}
 	
-	private void print1() {
+	private static void print1() {
 		
 	}
 	
-	private void print2() {
+	private static void print2() {
 		
 	}
 	
-	private void print3() {
+	private static void print3() {
 		
 	}
 	
-	private void print4() {
+	private static void print4() {
 		
 	}
 	
-	private void print5() {
+	private static void print5() {
 		
 	}
 	
-	private void print6() {
+	private static void print6() {
 		
 	}
 	
-	private void print7() {
+	private static void print7() {
 		
 	}
 	
-	private void print8() {
+	private static void print8() {
 		
 	}
 	
-	private void print9() {
+	private static void print9() {
 		
 	}
 	
-	private void print0() {
+	private static void print0() {
 		
 	}
 	
-	private void printDot() {
+	private static void printDot() {
 		
 	}
 	
-	private void printComma() {
+	private static void printComma() {
 		
 	}
 	
-	private void printQMark() {
+	private static void printQMark() {
 		
 	}
 	
-	private void printApostrophe() {
+	private static void printApostrophe() {
 		
 	}
 	
-	private void printSlash() {
+	private static void printSlash() {
 		
 	}
 	
-	private void printColon() {
+	private static void printColon() {
 		
 	}
 
-	private void printSimile() {
+	private static void printSimile() {
 		
 	}
 	
-	private void printPlus() {
+	private static void printPlus() {
 		
 	}
 	
-	private void printMinus() {
+	private static void printMinus() {
 		
 	}
 	
-	private void printEquals() {
+	private static void printEquals() {
 		
 	}
 }
