@@ -1,5 +1,8 @@
 // If the code is inefficient, consider using StringBuilder
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Deque;
 import java.util.List;
 
 import lejos.hardware.Button;
@@ -16,8 +19,10 @@ public class MorseInput {
     static TouchAdapter adapter = new TouchAdapter(touchSensor);
 
     // List to store morsecode
-    static List<String> morseWords = new ArrayList<String>();
-    static String currWord = "";
+    static List<String> morseWordArray = new ArrayList<String>();
+    static String morseWord = "";
+    static List<String> normalWordArray = new ArrayList<String>();
+    static String normalWord= "";
 
     // Morse code symbols and pauses
     // . -> short press (1 unit)
@@ -27,7 +32,7 @@ public class MorseInput {
     // w -> very long pause (7 units)
 
     // Time definitions in milliseconds
-    static long unit = 600;
+    static long unit = 1000;
     static long ShortPress = unit;
     static long LongPress = 3 * unit;
 
@@ -35,23 +40,25 @@ public class MorseInput {
     static long pauseLetter = 3 * unit;
     static long pauseWord = 7 * unit;
 
-    static long tolerance = unit / 2;
+    static long tolerance = unit; //ToDo anpassen
 
     public static void main(String[] args) {
-        GetInput();
+        GetInput();       	
+       	Delay.msDelay(5000);
+
     }
 
 	//gets the input from the EV3 Touch Sensor and computes the duration of the time, when the sensor is pushed and paused 
     public static void GetInput() {
         System.out.println("Starting");
+        long start_press;
+        long finish_press;
+
+        long start_pause = System.currentTimeMillis();
+        long finish_pause;
+
         while (true) {
-            long start_press;
-            long finish_press;
 
-            long start_pause;
-            long finish_pause;
-
-            start_pause = System.currentTimeMillis();
 
             if (adapter.isPressed()) {
                 // Sensor is pressed, measure time
@@ -59,9 +66,11 @@ public class MorseInput {
                 // Calculate pause duration
                 finish_pause = System.currentTimeMillis();
                 long time_pause = finish_pause - start_pause;
-                HandleInput("pause", time_pause);
+                if(HandleInput("pause", time_pause) == 0) {
+                	return;
+                }
 
-                System.out.print("Pressed");
+                //System.out.print("Pressed");
                 start_press = System.currentTimeMillis();
 
                 while (true) {
@@ -73,47 +82,105 @@ public class MorseInput {
                 }
                 // Calculate pressed duration
                 long time_pressed = finish_press - start_press;
-                System.out.println(time_pressed);
+                //System.out.println(time_pressed);
 
 
-                HandleInput("pressed", time_pressed);
+                if(HandleInput("pressed", time_pressed) == 0) {
+                	return;
+                }
+                start_pause = System.currentTimeMillis();
             }
         }
     }
-	//Converts the time with the type into the correct symbos of the morsecode
+
+	//Converts the time with the type into the correct symbols of the morsecode
 	//type = "pause" or "pressed"
 	//time = lenght of the duration pressed or not pressed
-    public static void HandleInput(String type, long time) {
-        if (type.equals("pause")) {
+    //-1 error
+    //0 end
+    //1 continue
+    public static int HandleInput(String type, long time) {
+    	System.out.println(type + ": " + time + ", " + morseWord);
+    	
+    	if (type.equals("pause")) {
             if (LongInRadius(time, pauseSymbol)) {
-                currWord += "s";
+                morseWord += "s";
+
             } else if (LongInRadius(time, pauseLetter)) {
-                // Letter finished
-                currWord += "l";
+                //Letter finished
+                String letter = morseWord;
+                letter.replace("s", "");
+                normalWord += translate(letter);
+            	System.out.println("letter finished: " + translate(letter));
+                morseWord = "";
+
             } else if (LongInRadius(time, pauseWord)) {
-                // Word finished
-                morseWords.add(currWord);
-                currWord = "";
+                // Word finished            
+            	if(".s.s.s-s.s-l" == morseWord || (".s.s.s-s.s-" == morseWord) || time > 5000) {
+            		//end start translation
+
+            		//normalWords.add(normalLetters);
+            		morseWord = "";
+                    normalWord = "";
+            		return 0;
+            	}
+            	System.out.println("Word finished: " + normalWord);
+                normalWordArray.add(normalWord);
+            	/*
+            	if(currWord.length() == 7 || currWord.length() >= 9 || (currWord.length() == 8 && currWord != "remove")) {
+            		System.out.println("Error: wrong type");
+            	}
+            	*/
+                normalWord = "";
+                morseWord = "";
             } else {
-                System.out.println("Error: wrong time in HandleInput pause");
+                System.out.println("Error 1");
+                return -1;
             }
         } else if (type.equals("pressed")) {
             if (LongInRadius(time, ShortPress)) {
+            	System.out.println("shortPress");
                 // Dot
-                currWord += ".";
+                morseWord += ".";
             } else if (LongInRadius(time, LongPress)) {
                 // Dash
-                currWord += "-";
+            	System.out.println("long press");
+                morseWord += "-";
             } else {
-                System.out.println("Error: wrong time in HandleInput pressed");
+                //System.out.println("Error: wrong time in HandleInput pressed");
+                
             }
         } else {
             System.out.println("Error: wrong type");
+            return -1;
         }
+        
+        return 1;
     }
 
 	//checks if the number num is withing a tolerance of expected
     public static boolean LongInRadius(long num, long expected) {
         return expected - tolerance < num && expected + tolerance > num;
     }
+    
+    public static String translate(String letter) {
+		String[] language = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
+	            "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", 
+	            "y", "z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
+	            ".", ",", "?", "´", "/", ":", ";", "+", "-", "=", "start", "remove"};
+		String[] morse = { ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", 
+	            ".---", "-.-", ".-..", "--", "-.", "---", ".---.", "--.-", ".-.",
+	            "-", "...", "..-", "...-", ".--", "-..-", "-.--", "--..", ".----",
+	            "..---", "...--", "....-", ".....", "-....", "--...", "---..", "----.",
+	            "-----", ".-.-.-", "--..--", "..--..", ".----.", "-..-.", "---...", "-.-.-.", ".-.-.", "-....-", "-...-", "-.-.-", "........"};
+		String normalLetter = "";
+        int idx = Arrays.asList(morse).indexOf(letter);
+        if(idx == -1) {
+            System.out.println("Error translation: no idx");
+            return "";
+        } else {
+            return language[idx];
+        }		
+	}
+	
 }
