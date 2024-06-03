@@ -28,7 +28,11 @@ public class Printing {
 	static ColorAdapter paperVisibleAdapter = new ColorAdapter(colorSensor);
 	
 	public static void main(String[] args) {
+		
+
+		// ------- LIFT PEN ------- //
 		//liftPen();
+		
 		String[] a = new String[2];
 		startPrinting(a);
 		
@@ -139,177 +143,183 @@ public class Printing {
 	
 	public static void startPrinting(String[] words) {
 		
+		
+		
 		char inputLetter;
 		
 		initialize();
 		
-		setPen();
-		
-		//links
-		motorX.rotate(-90);
-		//hinten
+		//set position to first lower left corner
+		//stift nach hinten
 		motorY.rotate(-90);
-		//rechts
-		motorX.rotate(90);
-		//vorne
-		motorY.rotate(90);
+		
+
+		printLetter('a');
+		printLetter('a');
+		
+		printLetter('b');
+		
+		
 		/*while(inputQueue.peek() != null) {
 			//remove letter from queues and print it
 			inputLetter = inputQueue.poll();
 			printLetter(a);
 		}*/
 		
+
+				
+		
 	}
 	
 	public static void printLetter(char a) {
 		switch(a) {
-		case 1:
+		case 'a':
 			printA();
 			break;
-		case 2:
+		case 'b':
 			printB();
 			break;
-		case 3:
+		case 'c':
 			printC();
 			break;
-		case 4:
+		case 'd':
 			printD();
 			break;
-		case 5:
+		case 'e':
 			printE();
 			break;
-		case 6:
+		case 'f':
 			printF();
 			break;
-		case 7:
+		case 'g':
 			printG();
 			break;
-		case 8:
+		case 'h':
 			printH();
 			break;
-		case 9:
+		case 'i':
 			printI();
 			break;
-		case 10:
+		case 'j':
 			printJ();
 			break;
-		case 11:
+		case 'k':
 			printK();
 			break;
-		case 12:
+		case 'l':
 			printL();
 			break;
-		case 13:
+		case 'm':
 			printM();
 			break;
-		case 14:
+		case 'n':
 			printN();
 			break;
-		case 15:
+		case 'o':
 			printO();
 			break;
-		case 16:
+		case 'p':
 			printP();
 			break;
-		case 17:
+		case 'q':
 			printQ();
 			break;
-		case 18:
+		case 'r':
 			printR();
 			break;
-		case 19:
+		case 's':
 			printS();
 			break;
-		case 20:
+		case 't':
 			printT();
 			break;
-		case 21:
+		case 'u':
 			printU();
 			break;
-		case 22:
+		case 'v':
 			printV();
 			break;
-		case 23:
+		case 'w':
 			printW();
 			break;
-		case 24:
+		case 'x':
 			printX();
 			break;
-		case 25:
+		case 'y':
 			printY();
 			break;
-		case 26:
+		case 'z':
 			printZ();
 			break;
-		case 27:
+		case '1':
 			print1();
 			break;
-		case 28:
+		case '2':
 			print2();
 			break;
-		case 29:
+		case '3':
 			print3();
 			break;
-		case 30:
+		case '4':
 			print4();
 			break;
-		case 31:
+		case '5':
 			print5();
 			break;
-		case 32:
+		case '6':
 			print6();
 			break;
-		case 33:
+		case '7':
 			print7();
 			break;
-		case 34:
+		case '8':
 			print8();
 			break;
-		case 35:
+		case '9':
 			print9();
 			break;
-		case 36:
+		case '0':
 			print0();
 			break;
-		case 37: // .
+		case '.': // .
 			printDot();
 			break;
-		case 38: // ,
+		case ',': // ,
 			printComma();
 			break;
-		case 39: // ?
+		case '?': // ?
 			printQMark();
 			break;
-		case 40:// '
+		case '\'':// '
 			printApostrophe();
 			break;
-		case 41: // /
+		case '/': // /
 			printSlash();
 			break;
-		case 42: // :
+		case ':': // :
 			printColon();
 			break;
-		case 43: // ;
+		case ';': // ;
 			printSimile();
 			break;
-		case 44:// +
+		case '+':// +
 			printPlus();
 			break;
-		case 45:// -
+		case '-':// -
 			printMinus();
 			break;
-		case 46:// =
+		case '=':// =
 			printEquals();
 			break;
 		}
 	}
 	
 	public static void printSpace() {
-		
+		straight("left", 30);
 	}
 	
-	private static void returnToLowerLeftCorner() {
-		
+	private static void printSpaceBetweenWords() {
+		straight("left", 60);
 	}
 	
 	public static void setPen() {
@@ -326,15 +336,131 @@ public class Printing {
 		motorZ.stop();
 	}
 	
+	private static void diagonal(String lowerCorner, String upperCorner, String direction, int degree) {
+		
+		//only 90° or 45°
+		if(degree != 90 && degree != 45) {
+			System.out.println("Wrong degree input, only 45° or 90°.");
+			return;
+		}
+		
+		//only 90° or 45°
+		if(direction != "up" && direction != "down") {
+			System.out.println("Wrong direction, only direction up or down possible!");
+			return;
+		}
+		
+		//lower
+		/*if((lowerCorner != "Right" && upperCorner != "Left") || (lowerCorner != "Left" && upperCorner != "Right" )) {
+			System.out.println("Wrong direction, only direction up or down possible!");
+			return;
+		}*/
+		
+		if(direction == "up") {
+			if(lowerCorner == "Right" && upperCorner == "Left") {
+				motorY.startSynchronization();
+				//stift nach hinten
+				motorY.rotate(-degree);
+				//stift nach links
+				motorX.rotate(-degree);
+				motorY.endSynchronization();
+			} else if (lowerCorner == "Left" && upperCorner == "Right") {
+				motorY.startSynchronization();
+				//stift nach hinten
+				motorY.rotate(-degree);
+				//stift nach rechts
+				motorX.rotate(degree);
+				motorY.endSynchronization();
+			}
+		} else if (direction == "down"){
+			if(upperCorner == "Left" && lowerCorner == "Right") {
+				motorY.startSynchronization();
+				//stift nach vorne
+				motorY.rotate(degree);
+				//stift nach rechts
+				motorX.rotate(degree);
+				motorY.endSynchronization();
+			} else if (upperCorner == "Right" && lowerCorner == "Left") {
+				motorY.startSynchronization();
+				//stift nach vorne
+				motorY.rotate(degree);
+				//stift nach links
+				motorX.rotate(-degree);
+				motorY.endSynchronization();
+			}
+		}
+		
+		Delay.msDelay(1000);
+		
+	}
+	
+	private static void straight(String direction, int degree) {
+		//only 90° or 45°
+		if(degree != 90 && degree != 45) {
+			System.out.println("Wrong degree input, only 45° or 90°.");
+			return;
+		}
+		
+		//only 90° or 45°
+		if(direction != "up" && direction != "down" && direction != "left" && direction != "right") {
+			System.out.println("Wrong direction, only direction up, down, left, right possible!");
+			return;
+		}
+		
+		if(direction == "up") {
+			motorY.rotate(-degree);
+		} else if(direction == "down") {
+			motorY.rotate(degree);
+		} else if(direction == "right") {
+			motorX.rotate(degree);
+		} else if(direction == "left") {
+			motorX.rotate(-degree);
+		}
+
+	}
+	
 	// --------------- PRINT LETTER FUNCTIONS --------------- //
 	// Prints the letter given by the morse code input        //
 	
 	private static void printA() {
 		
+		//Character
+		setPen();
+		straight("down", 45);
+		diagonal("Left", "Right", "down", 45);
+		diagonal("Right", "Left", "up", 45);
+		straight("up", 45);
+		liftPen();
+		
+		straight("down", 45);
+
+		//----- Mittellinie ----- //
+		setPen();
+		straight("right", 45);
+		liftPen();
+		
+		//positioning
+		straight("left", 45);
+		straight("up", 45);
+		
+		printSpace();
 	}
 	
 	private static void printB() {
 		
+		//Character
+		setPen();
+		straight("down", 90);
+		straight("left", 45);
+		diagonal("Left", "Right", "up", 45);
+		diagonal("Right", "Left", "up", 45);
+		straight("right", 45);
+		liftPen();
+		
+		//positioning
+		straight("left", 45);
+
+		printSpace();
 	}
 	
 	private static void printC() {
