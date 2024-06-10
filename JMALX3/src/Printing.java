@@ -118,12 +118,12 @@ public class Printing {
 			}
 		}
 		
-		Delay.msDelay(3000);
+		Delay.msDelay(1000);
 		
 		//Gehe auf richtige Höhe bei Initializierung
 		//Move sheet backwards
 		motorY.rotate(180);
-		Delay.msDelay(3000);
+		Delay.msDelay(1000);
 		
 		//Move to the right
 		motorX.forward();
@@ -142,9 +142,6 @@ public class Printing {
 	}
 	
 	public static void startPrinting(String[] words) {
-		
-		
-		
 		char inputLetter;
 		
 		initialize();
@@ -153,21 +150,20 @@ public class Printing {
 		//stift nach hinten
 		motorY.rotate(-90);
 		
+		jumpRows(2);
 
 		printLetter('a');
-		printLetter('a');
-		
 		printLetter('b');
+		printLetter('c');
+		printLetter('d');
+		printLetter('e');
 		
 		
 		/*while(inputQueue.peek() != null) {
 			//remove letter from queues and print it
 			inputLetter = inputQueue.poll();
 			printLetter(a);
-		}*/
-		
-
-				
+		}*/			
 		
 	}
 	
@@ -314,25 +310,43 @@ public class Printing {
 		}
 	}
 	
+	public static void jumpRows(int number) {
+		for(int i = 0; i < number; i++) {
+			straight("up", 180);	
+		}
+		
+		motorX.forward();
+		
+		while(true) {
+			if(penAdapter.isPressed()) {
+				motorX.stop();
+				break;
+			}
+		}
+		
+	}
+	
 	public static void printSpace() {
 		straight("left", 30);
+		//Delay.msDelay(1000);
 	}
 	
 	private static void printSpaceBetweenWords() {
 		straight("left", 60);
+		//Delay.msDelay(1000);
 	}
 	
 	public static void setPen() {
 
 		motorZ.rotate(180);
-		Delay.msDelay(1000);
+		//Delay.msDelay(1000);
 		motorZ.stop();
 	}
 	
 	private static void liftPen() {
 
 		motorZ.rotate(-180);
-		Delay.msDelay(1000);
+		//Delay.msDelay(1000);
 		motorZ.stop();
 	}
 	
@@ -395,11 +409,6 @@ public class Printing {
 	}
 	
 	private static void straight(String direction, int degree) {
-		//only 90° or 45°
-		if(degree != 90 && degree != 45) {
-			System.out.println("Wrong degree input, only 45° or 90°.");
-			return;
-		}
 		
 		//only 90° or 45°
 		if(direction != "up" && direction != "down" && direction != "left" && direction != "right") {
@@ -436,11 +445,11 @@ public class Printing {
 
 		//----- Mittellinie ----- //
 		setPen();
-		straight("right", 45);
+		straight("right", 70);
 		liftPen();
 		
 		//positioning
-		straight("left", 45);
+		straight("left", 70);
 		straight("up", 45);
 		
 		printSpace();
@@ -464,19 +473,87 @@ public class Printing {
 	}
 	
 	private static void printC() {
+		//Character
+		setPen();
+		straight("left", 45);
+		liftPen();
+		straight("right", 45);
+		setPen();
 		
+		straight("down", 90);
+		straight("left", 45);
+		liftPen();
+		
+		//positioning
+		straight("up", 90);
+
+		printSpace();
 	}
 	
 	private static void printD() {
+		//Character
+		setPen();
+		straight("down", 90);
+		diagonal("Right", "Left", "up", 45);
+		diagonal("Left", "Right", "up", 45);
+		liftPen();
 		
+		//positioning
+		straight("left", 45);
+
+		printSpace();
 	}
 	
 	private static void printE() {
+		//Character
+		setPen();
+		straight("left", 45);
+		liftPen();
+		straight("right", 45);
+		setPen();
 		
+		straight("down", 45);
+		
+		straight("left", 45);
+		liftPen();
+		straight("right", 45);
+		setPen();
+		
+		straight("down", 45);
+		
+		straight("left", 45);
+		liftPen();
+		
+		//positioning
+		straight("up", 90);
+
+		printSpace();
 	}
 	
 	private static void printF() {
+		//Character
+		setPen();
+		straight("left", 45);
+		liftPen();
+		straight("right", 45);
+		setPen();
 		
+		straight("down", 45);
+		
+		straight("left", 45);
+		liftPen();
+		straight("right", 45);
+		setPen();
+		
+		straight("down", 45);
+		
+		straight("left", 45);
+		liftPen();
+		
+		//positioning
+		straight("up", 90);
+
+		printSpace();
 	}
 	
 	private static void printG() {
