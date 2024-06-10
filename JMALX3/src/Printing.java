@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 
 import lejos.hardware.Button;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
@@ -27,48 +29,22 @@ public class Printing {
 	static EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S2);
 	static ColorAdapter paperVisibleAdapter = new ColorAdapter(colorSensor);
 	
+	//XCounter for new line
+	static int xCounter;
+	
+	
+	/*TODO:
+	 * 1. Erster und letzter Buchstabe eines neuen Worts bei Zeilenumbruch beachten
+	 * 2. Zahlen 0-9 & Sonderzeichen coden
+	 * 3. 1180 nach links für ende x-Achse
+	 * 4. xPos fuer alle switch cases
+	 * 5. Schnittstelle Testlauf
+	*/
 	public static void main(String[] args) {
 		
-
-		// ------- LIFT PEN ------- //
-		//liftPen();
-		
-		String[] a = new String[2];
-		startPrinting(a);
-		
-		/*
-		
-		Printing print = new Printing();
-		
-		//print.setPen(motorZ);
-		//rotate left with minus degree
-		//right plus degree
-		//4 Umdrehungen
-		//motorX.rotate(-1440);
-		//Delay.msDelay(5000);
-		
-		//positiv ist hinten
-		//negativ vorne
-		//motorY.rotate(360);
-		//
-		
-		//print.liftPen(motorZ);
-		
-		//ende der seite y
-		//5,5 umdrehungen
-		motorY.rotate(-1980);
-		Delay.msDelay(5000);
-
-		/*eigene methode
-
-		int i = 0;
-		while(i<5) {
-			motorZ.rotateTo(90);
-			System.out.println("rotate");
-			i++;
-		}
-  
-		*/
+		List<String> normalWordArray = new ArrayList<String>();
+		normalWordArray.add("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+		startPrinting(normalWordArray);
 	}
 	
 	public static void initialize() {
@@ -141,41 +117,46 @@ public class Printing {
 		motorX.stop();
 	}
 	
-	public static void startPrinting(String[] words) {
-		char inputLetter;
-		
+	public static void startPrinting(List<String> words) {
 		initialize();
 		
 		//set position to first lower left corner
 		//stift nach hinten
 		motorY.rotate(-90);
 		
-		jumpRows(2);
-
-		printLetter('a');
-		printLetter('b');
-		printLetter('c');
-		printLetter('d');
-		printLetter('e');
-		
-		
-		/*while(inputQueue.peek() != null) {
-			//remove letter from queues and print it
-			inputLetter = inputQueue.poll();
-			printLetter(a);
-		}*/			
+		// ----------- START READING INPUT --------- //
+		String word;
+		for(int i = 0; i < words.size(); i++) {
+			//get word
+			word = words.get(i);
+			//iterate over string and print every character
+			for(int j = 0; j < word.length(); j++) {
+				printLetter(word.charAt(j));
+			}
+			
+			//when word was printed, 
+			//print the bigger space between two words only if end of row is not reached yet,
+			//otherwise, start in a new line
+			calcXPos(0, false);
+				
+		}	
 		
 	}
 	
 	public static void printLetter(char a) {
+		//print corresponding letter, for each letter check
+		//if it still fits in this row, otherwise print a "-" and start in a newLine
 		switch(a) {
 		case 'a':
+			calcXPos(70, true);
 			printA();
 			break;
 		case 'b':
+			calcXPos(45, true);
 			printB();
 			break;
 		case 'c':
+			//calcXPos(45);
 			printC();
 			break;
 		case 'd':
@@ -310,7 +291,7 @@ public class Printing {
 		}
 	}
 	
-	public static void jumpRows(int number) {
+	public static void newLine(int number) {
 		for(int i = 0; i < number; i++) {
 			straight("up", 180);	
 		}
@@ -324,29 +305,52 @@ public class Printing {
 			}
 		}
 		
+		xCounter = 0;
+		
+	}
+	
+	public static void calcXPos(int degree, boolean character) {
+		xCounter += degree;
+		if(character) {
+			xCounter+= 30;
+			if(xCounter >= 1180) {
+				printDash();
+				newLine(1);
+				xCounter += degree + 30;
+			}
+		} else {
+			//space
+			xCounter += 60;
+			//additional space to avoid, that first letter would not fit 
+			//and a dash is printed
+			xCounter += 100;
+			if(xCounter < 1180) {
+				printSpaceBetweenWords();
+				xCounter -= 100;
+			} else {
+				//Erster
+				newLine(1);
+				xCounter += degree + 30;
+			}
+		}
+		
 	}
 	
 	public static void printSpace() {
 		straight("left", 30);
-		//Delay.msDelay(1000);
 	}
 	
 	private static void printSpaceBetweenWords() {
-		straight("left", 60);
-		//Delay.msDelay(1000);
+		straight("left", 30);
 	}
 	
 	public static void setPen() {
-
 		motorZ.rotate(180);
-		//Delay.msDelay(1000);
 		motorZ.stop();
 	}
 	
 	private static void liftPen() {
-
 		motorZ.rotate(-180);
-		//Delay.msDelay(1000);
 		motorZ.stop();
 	}
 	
@@ -460,14 +464,14 @@ public class Printing {
 		//Character
 		setPen();
 		straight("down", 90);
-		straight("left", 45);
+		straight("left", 50);
 		diagonal("Left", "Right", "up", 45);
 		diagonal("Right", "Left", "up", 45);
-		straight("right", 45);
+		straight("right", 50);
 		liftPen();
 		
 		//positioning
-		straight("left", 45);
+		straight("left", 50);
 
 		printSpace();
 	}
@@ -533,20 +537,20 @@ public class Printing {
 	private static void printF() {
 		//Character
 		setPen();
-		straight("down", 45);
+		straight("down", 90);
 		
 		straight("left", 45);
 		liftPen();
+		
 		straight("right", 45);
+		straight("up", 45);
+		
 		setPen();
-		
-		straight("down", 45);
-		
 		straight("left", 45);
 		liftPen();
 		
 		//positioning
-		straight("up", 90);
+		straight("up", 45);
 
 		printSpace();
 	}
@@ -554,19 +558,19 @@ public class Printing {
 	private static void printG() {
 		//Character
 		setPen();
-		straight("left", 90);
-		straight("down", 45);
-		straight("right", 45);
+		straight("left", 45);
+		straight("down", 30);
+		straight("right", 30);
 		liftPen();
 		
-		straight("left", 45);
-		straight("up", 45);
-		straight("right", 90);
+		straight("left", 30);
+		straight("up", 30);
+		straight("right", 45);
 		setPen();
 		
 		straight("down", 90);
 		
-		straight("left", 90);
+		straight("left", 45);
 		liftPen();
 		
 		//positioning
@@ -612,10 +616,10 @@ public class Printing {
 	private static void printJ() {
 		//Character
 		setPen();
-		straight("down", 45);
+		straight("down", 30);
 		liftPen();
 		
-		straight("up", 45);
+		straight("up", 30);
 		
 		setPen();
 		straight("left", 45);
@@ -772,6 +776,7 @@ public class Printing {
 	}
 	
 	private static void printS() {
+		//Character
 		setPen();
 		straight("left", 45);
 		straight("down", 45);
@@ -780,12 +785,14 @@ public class Printing {
 		straight("left", 45);
 		liftPen();
 		
+		//positioning
 		straight("up", 90);
 		
 		printSpace();
 	}
 	
 	private static void printT() {
+		//Character
 		straight("down", 90);
 		setPen();
 		
@@ -798,12 +805,14 @@ public class Printing {
 		straight("up", 90);
 		liftPen();
 		
+		//positioning
 		straight("left", 22);
 		
 		printSpace();
 	}
 	
 	private static void printU() {
+		//Character
 		straight("down", 90);
 		setPen();
 		
@@ -812,6 +821,8 @@ public class Printing {
 		straight("down", 90);
 		
 		liftPen();
+		
+		//positioning
 		straight("up", 90);
 		
 		printSpace();
@@ -819,8 +830,9 @@ public class Printing {
 	}
 	
 	private static void printV() {
+		//Character
 		straight("down", 90);
-		setPen()
+		setPen();
 		
 		straight("up", 45);
 		diagonal("Right", "Left", "up", 45);
@@ -828,12 +840,14 @@ public class Printing {
 		straight("down", 45);
 		liftPen();
 		
+		//positioning
 		straight("up", 90);
 		
 		printSpace();
 	}
 	
 	private static void printW() {
+		//Character
 		straight("down", 90);
 		setPen();
 		
@@ -843,26 +857,31 @@ public class Printing {
 		straight("down", 90);
 		liftPen();
 		
+		//positioning
 		straight("up", 90);
 		
 		printSpace();		
 	}
 	
 	private static void printX() {
+		//Character
 		setPen();
 		diagonal("Left", "Right", "down", 90);
 		
 		liftPen();
-		straight("left", 70);
+		straight("right", 70);
 		setPen();
 		
 		diagonal("Right", "Left", "up", 90);
 		liftPen();
 		
+		//positioning
+		
 		printSpace();
 	}
 
 	private static void printY() {
+		//Character
 		straight("down", 90);
 		setPen();
 		
@@ -876,27 +895,27 @@ public class Printing {
 		diagonal("Left", "Right", "down", 45);
 		liftPen();
 		
-		straight("down", 90);
+		//positioning
+		straight("up", 90);
 		
 		printSpace();
 	}
 	
 	private static void printZ() {
-		
-
 		//Character
 		setPen();
-		straight("left", 45);
+		straight("left", 90);
 		
 		liftPen();
-		straight("right", 45);
+		straight("right", 90);
 		setPen();
 		
 		diagonal("Left", "Right", "down", 90);
 		
-		straight("right", 45);
+		straight("right", 90);
 		liftPen();
 		
+		//positioning
 		diagonal("Right", "Left", "up", 90);
 		
 		printSpace();
@@ -980,6 +999,17 @@ public class Printing {
 	}
 	
 	private static void printEquals() {
+		
+	}
+	
+	private static void printDash() {
+		straight("down", 45);
+		
+		setPen();
+		straight("left", 30);
+		liftPen();
+		
+		straight("up", 45);
 		
 	}
 }

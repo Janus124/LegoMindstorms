@@ -138,7 +138,7 @@ public class MorseInput {
        	//print
        	 */
 
-       	 
+        Printing.startPrinting(normalWordArray);
 
     }
     
