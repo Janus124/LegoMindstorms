@@ -533,11 +533,6 @@ public class Printing {
 	private static void printF() {
 		//Character
 		setPen();
-		straight("left", 45);
-		liftPen();
-		straight("right", 45);
-		setPen();
-		
 		straight("down", 45);
 		
 		straight("left", 45);
@@ -557,51 +552,223 @@ public class Printing {
 	}
 	
 	private static void printG() {
+		//Character
+		setPen();
+		straight("left", 90);
+		straight("down", 45);
+		straight("right", 45);
+		liftPen();
 		
+		straight("left", 45);
+		straight("up", 45);
+		straight("right", 90);
+		setPen();
+		
+		straight("down", 90);
+		
+		straight("left", 90);
+		liftPen();
+		
+		//positioning
+		straight("up", 90);
+
+		printSpace();
 	}
 	
 	private static void printH() {
+		//Character
+		setPen();
+		straight("down", 90);
+		liftPen();
+		straight("up", 45);
 		
+		setPen();
+		straight("left", 45);
+		liftPen();
+		
+		straight("down", 45);
+		
+		setPen();
+		straight("up", 90);
+		liftPen();
+		
+		//positioning
+
+		printSpace();
 	}
 	
 	private static void printI() {
+		//Character
+		setPen();
+		straight("down", 90);
+		liftPen();
 		
+		//positioning
+		straight("up", 90);
+
+		printSpace();
 	}
 	
 	private static void printJ() {
+		//Character
+		setPen();
+		straight("down", 45);
+		liftPen();
 		
+		straight("up", 45);
+		
+		setPen();
+		straight("left", 45);
+		straight("down", 90);
+		straight("right", 45);
+		liftPen();
+		
+		//positioning
+		straight("left", 45);
+		straight("up", 90);
+
+		printSpace();
 	}
 	
 	private static void printK() {
+		//Character
+		setPen();
+		straight("down", 45);
+		diagonal("Right", "Left", "up", 45);
+		liftPen();
+		diagonal("Right", "Left", "down", 45);
 		
+		setPen();
+		diagonal("Left", "Right", "down", 45);
+		liftPen();
+		diagonal("Left", "Right", "up", 45);
+		setPen();
+		straight("down", 45);
+		liftPen();
+		
+		//positioning
+		straight("left", 35);
+		straight("up", 90);
+
+		printSpace();
 	}
 	
 	private static void printL() {
+		//Character
+		setPen();
+		straight("down", 90);
+		liftPen();
 		
+		straight("up", 90);
+		
+		setPen();
+		straight("left", 45);
+		liftPen();
+		
+		//positioning
+
+		printSpace();
 	}
 	
 	private static void printM() {
-		
+		//Character
+		setPen();
+		straight("down", 90);
+		diagonal("Right", "Left", "up", 45);
+		diagonal("Left", "Right", "down", 45);
+		straight("up", 90);
+		liftPen();
+
+		//positioning
+
+		printSpace();
 	}
 	
 	private static void printN() {
-		
+		//Character
+		setPen();
+		straight("down", 90);
+		diagonal("Right", "Left", "up", 90);
+		straight("down", 90);
+		liftPen();
+
+		//positioning
+		straight("up", 90);
+
+		printSpace();
 	}
 
 	private static void printO() {
-		
+		//Character
+		setPen();
+		straight("down", 90);
+		straight("left", 45);
+		straight("up", 90);
+		straight("right", 45);
+		liftPen();
+
+		//positioning
+		straight("left", 45);
+
+		printSpace();
 	}
 	
 	private static void printP() {
-		
+		//Character
+		setPen();
+		straight("down", 90);
+		straight("left", 45);
+		straight("up", 45);
+		straight("right", 45);
+		liftPen();
+
+		//positioning
+		straight("left", 45);
+		straight("up", 45);
+
+		printSpace();
 	}
 	
 	private static void printQ() {
+		//Character
+		setPen();
+		straight("down", 90);
+		straight("left", 45);
+		straight("up", 90);
 		
+		//Line in Q
+		liftPen();
+		straight("up", 20);
+		straight("left", 20);
+		setPen();
+		diagonal("Right", "Left", "down", 45);
+		liftPen();
+		straight("up", 20);
+		straight("left", 20);
+		
+		setPen();
+		straight("right", 45);
+		liftPen();
+
+		//positioning
+		straight("left", 45);
+
+		printSpace();
 	}
 	
 	private static void printR() {
-		
+		//Character
+		setPen();
+		straight("down", 90);
+		straight("left", 45);
+		straight("up", 45);
+		straight("right", 45);
+		diagonal("Right", "Left", "up", 45);
+		liftPen();
+
+		//positioning
+
+		printSpace();
 	}
 	
 	private static void printS() {
