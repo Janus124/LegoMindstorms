@@ -33,7 +33,7 @@ public class MorseInput {
     // w -> very long pause (7 units)
 
     // Time definitions in milliseconds
-    static long unit = 1000;
+    static long unit = 3000;
     static long ShortPress = unit;
     static long LongPress = 3 * unit;
 
@@ -207,7 +207,7 @@ public class MorseInput {
     //0 end
     //1 continue
     public static int HandleInput(String type, long time) {
-    	System.out.println(type + ": " + time);
+    	//System.out.println(type + ": " + time);
     	
     	if (type.equals("pause")) {
             if (LongInRadius(time, pauseSymbol)) {
@@ -219,7 +219,7 @@ public class MorseInput {
                 String letter = morseLetter;
                 letter = translate(letter);
                 normalWord = normalWord + letter;
-            	//System.out.println("letter finished: " + letter);
+            	System.out.println("letter finished: " + letter);
                 morseLetter = "";
                 //System.out.println(normalWord);
                 ourprint();
@@ -229,6 +229,7 @@ public class MorseInput {
                 // Word finished            
             	if("...-.-l" == morseLetter || ("...-.-" == morseLetter) || morseLetter.length() > 8) {
             		//end
+            		System.out.println("Ende");
             		morseLetter = "";
                     normalWord = "";
             		return 0;
@@ -238,7 +239,7 @@ public class MorseInput {
                 letter = translate(letter);
                 normalWord = normalWord + letter;
             	
-            	//System.out.println("Word finished: " + normalWord);
+            	System.out.println("Word finished: " + normalWord);
             	
             	//add word to final array
                 normalWordArray.add(normalWord);
@@ -285,8 +286,8 @@ public class MorseInput {
 		String[] language = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
 	            "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", 
 	            "y", "z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
-	            ".", ",", "?", "´", "/", ":", ";", "+", "-", "=", "start", "removeLetter", 
-	            "removeWord", "ü", "ö", "ä"
+	            ".", ",", "?", "´", "/", ":", ";", "+", "-", "=", "ende", "removeLetter", 
+	            "removeWord",
 	            /*, "$", "$", "$", "$", "$", "$", "$", "$", "$", "$", "$", "$", "$",
 	            "$", "$", "$", "$", "$", "$", "$", "$", "$", "$", "$", "$", "$", "$",
 	            "$", "$", "$", "$", "$", "$", "$", "$", "$", "$", "$", "$", "$", "$",
