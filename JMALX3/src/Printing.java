@@ -132,6 +132,10 @@ public class Printing {
 				
 		}	
 		
+		motorY.rotate(5 * 360);
+
+		
+		
 	}
 	
 	private static void printLetter(char a) {
@@ -330,7 +334,7 @@ public class Printing {
 		}
 	}
 	
-	private static void newLine(int number) {
+	public static void newLine(int number) {
 		for(int i = 0; i < number; i++) {
 			straight("up", 180);	
 		}
@@ -388,7 +392,7 @@ public class Printing {
 		motorZ.stop();
 	}
 	
-	private static void liftPen() {
+	public static void liftPen() {
 		motorZ.rotate(-180);
 		motorZ.stop();
 	}
