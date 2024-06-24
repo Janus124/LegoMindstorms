@@ -52,7 +52,15 @@ public class MorseInput {
     	
     	Printing.initialize();
     	
+    	
+    	clearOurDisplay();
+    	
+    	
+    	Printing.newLine(4);
+    	
+    	System.out.println("Start morsing");
     	Sound.playTone(1175, 1000, 10);
+    	
     	
         GetInput();
        	
@@ -96,8 +104,11 @@ public class MorseInput {
         	
         	//End listening to morser
         	if(Button.ENTER.isDown()) {
+        		//ToDo
+        		normalWordArray.add(normalWord);
 				break;
 			}
+        	printCurrWord();
         	
 
             if (adapter.isPressed()) {
@@ -119,7 +130,7 @@ public class MorseInput {
                 	//playTone
                 	Sound.playTone(1175, 300, 5);
                     if (!adapter.isPressed()) {
-                    	printTime(System.currentTimeMillis() - start_press, "pressed");
+                    	//printTime(System.currentTimeMillis() - start_press, "pressed");
                         // Sensor is no longer pressed
                         finish_press = System.currentTimeMillis();
                         break;
@@ -178,9 +189,9 @@ public class MorseInput {
                 normalWord = normalWord + letter;
             	
             	System.out.println("Word finished: " + normalWord);
+            	saveWordToArray();
             	
-            	//add word to final array
-                normalWordArray.add(normalWord);
+            	
             	/*
             	if(currWord.length() == 7 || currWord.length() >= 9 || (currWord.length() == 8 && currWord != "remove")) {
             		System.out.println("Error: wrong type");
@@ -216,6 +227,11 @@ public class MorseInput {
         return 1;
     }
 
+    public static void saveWordToArray() {
+    	//add word to final array
+        normalWordArray.add(normalWord);
+    }
+    
 	//checks if the number num is withing a tolerance of expected
     public static boolean LongInRadius(long num, long expected) {
         return expected - tolerance < num && expected + tolerance > num;
@@ -248,7 +264,7 @@ public class MorseInput {
 			    ".---", "-.-", ".-..", "--", "-.", "---", ".---.", "--.-", ".-.",
 			    "-", "...", "..-", "...-", ".--", "-..-", "-.--", "--..", ".----",
 			    "..---", "...--", "....-", ".....", "-....", "--...", "---..", "----.",
-			    "-----", ".-.-.-", "--..--", "..--..", ".----.", "-..-.", "---...", "-.-.-.", ".-.-.", "-....-", "-...-", "-.-.-", "........",
+			    "-----", ".-.-.-", "--..--", "..--..", ".----.", "-..-.", "---...", "-.-.-.", ".-.-.", "-....-", "-...-", "......", "........",
 			    ".......", "..--"
 			};
 		String normalLetter = "";
@@ -268,21 +284,31 @@ public class MorseInput {
         		}
         		return "";
 	        } else if (normal == "removeWord"){
-	        	if(normalWord.length() == 0) {
 	        		if (!normalWordArray.isEmpty()) {
 	        			normalWordArray.remove(normalWordArray.size()-1);
 	        		}
-	        	} else {
-	        		normalWord = "";
-	        	}
+	        		return "";
+	  
+	        	
+	        } else if(normal == "ende"){
 	        	return "";
-	        } else {
+	        	
+	        }else{
+        	
+	        }
 	            return language[idx];
 	        }
         }
-	}
+
     
-    public static void printTime(long l, String type) {
+    public static void printCurrWord() {
+    	LCD.drawString(normalWord, 0, 0);
+    	
+    	//LCD.drawString(normalWordArray.get(normalWordArray.size()-1), 0, 1);
+    	return;
+    }
+    
+    public static void old_printTime(long l, String type) {
     	if(l % 100 == 0) {
 	    	//System.out.println("printTime1");
 	    	if(l < 1000) {
@@ -297,10 +323,25 @@ public class MorseInput {
     	}
     }
     
-    public static void resetDisplay() {
+    public static void old_resetDisplay() {
        	LCD.drawString("                                       ", 0, 0);
         LCD.drawString("                                       ", 0, 1);
         LCD.drawString("                                       ", 0, 2);
 }
+    
+    private static void clearOurDisplay() {
+    	System.out.println("");
+    	System.out.println("");
+    	System.out.println("");
+    	System.out.println("");
+    	System.out.println("");
+    	System.out.println("");
+    	System.out.println("");
+    	System.out.println("");
+    	System.out.println("");
+    	System.out.println("");
+    	System.out.println("");
+    	System.out.println("");
+    }
 	
 }
