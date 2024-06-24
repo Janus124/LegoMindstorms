@@ -34,21 +34,8 @@ public class Printing {
 	
 	
 	/*TODO:
-	 * 1. Erster und letzter Buchstabe eines neuen Worts bei Zeilenumbruch beachten 
-	 * 		Könnte gefixt sein
-	 * 2. Zahlen 0-9 & Sonderzeichen coden
-	 * 		Müssen noch geprinet werden
-	 * 3. 1180 nach links für ende x-Achse
-	 * 		1180 ist bisschen wenig, könnte 1200 sein, probieren! MAcht auch probleme bei vielen neuen Zeilen
 	 * 4. Schnittstelle Testlauf
 	*/
-	public static void main(String[] args) {
-		
-		List<String> normalWordArray = new ArrayList<String>();
-		normalWordArray.add("abc.def,ghi?jkl/mno:pqr;stu+vwx=yz");
-		normalWordArray.add("0-123'4560789");
-		startPrinting(normalWordArray);
-	}
 	
 	public static void initialize() {
 		//-------- SYNC MOTOR X and Y -------- //
@@ -121,13 +108,12 @@ public class Printing {
 	}
 	
 	public static void startPrinting(List<String> words) {
-		initialize();
+		//Initialize is called by the morse team before they start reading input
 		
 		//set position to first lower left corner
 		//stift nach hinten
 		motorY.rotate(-90);
 		
-		newLine(5);
 		
 		// ----------- START READING INPUT --------- //
 		String word;
@@ -148,7 +134,7 @@ public class Printing {
 		
 	}
 	
-	public static void printLetter(char a) {
+	private static void printLetter(char a) {
 		//print corresponding letter, for each letter check
 		//if it still fits in this row, otherwise print a "-" and start in a newLine
 		
@@ -298,39 +284,53 @@ public class Printing {
 			print0();
 			break;
 		case '.': // .
+			calcXPos(10, true);
 			printDot();
 			break;
 		case ',': // ,
+			calcXPos(10, true);
 			printComma();
 			break;
 		case '?': // ?
+			calcXPos(45, true);
 			printQMark();
 			break;
 		case '\'':// '
+			calcXPos(10, true);
 			printApostrophe();
 			break;
 		case '/': // /
+			calcXPos(50, true);
 			printSlash();
 			break;
 		case ':': // :
+			calcXPos(10, true);
 			printColon();
 			break;
 		case ';': // ;
+			calcXPos(10, true);
 			printSemicolon();
 			break;
 		case '+':// +
+			calcXPos(30, true);
 			printPlus();
 			break;
 		case '-':// -
+			calcXPos(30, true);
 			printMinus();
 			break;
 		case '=':// =
+			calcXPos(30, true);
 			printEquals();
 			break;
+		case '!':// !
+			calcXPos(10, true);
+			printEMark();
+			break;	
 		}
 	}
 	
-	public static void newLine(int number) {
+	private static void newLine(int number) {
 		for(int i = 0; i < number; i++) {
 			straight("up", 180);	
 		}
@@ -348,18 +348,18 @@ public class Printing {
 		
 	}
 	
-	public static void calcXPos(int degree, boolean character) {
+	private static void calcXPos(int degree, boolean character) {
 		xCounter += degree;
 		if(character) {
 			xCounter+= 30;
-			if(xCounter >= 1180) {
+			if(xCounter >= 1200) {
 				printDash();
 				newLine(1);
 				xCounter += degree + 30;
 			}
 		} else {
 			//space
-			xCounter += 60;
+			xCounter += 90;
 			//additional space to avoid, that first letter would not fit 
 			//and a dash is printed
 			xCounter += 100;
@@ -369,21 +369,21 @@ public class Printing {
 			} else {
 				//Erster
 				newLine(1);
-				xCounter += degree + 30;
+				//xCounter += degree + 30;
 			}
 		}
 		
 	}
 	
-	public static void printSpace() {
+	private static void printSpace() {
 		straight("left", 30);
 	}
 	
 	private static void printSpaceBetweenWords() {
-		straight("left", 30);
+		straight("left", 60);
 	}
 	
-	public static void setPen() {
+	private static void setPen() {
 		motorZ.rotate(180);
 		motorZ.stop();
 	}
@@ -676,22 +676,16 @@ public class Printing {
 	private static void printK() {
 		//Character
 		setPen();
-		straight("down", 45);
-		diagonal("Right", "Left", "up", 45);
+		straight("down", 90);
 		liftPen();
-		diagonal("Right", "Left", "down", 45);
-		
+		straight("left", 50);
 		setPen();
-		diagonal("Left", "Right", "down", 45);
-		liftPen();
+		
 		diagonal("Left", "Right", "up", 45);
-		setPen();
-		straight("down", 45);
-		liftPen();
+		diagonal("Right", "Left", "up", 45);
 		
+		liftPen();
 		//positioning
-		straight("left", 35);
-		straight("up", 90);
 
 		printSpace();
 	}
@@ -1222,7 +1216,7 @@ public class Printing {
 	}
 
 	private static void printPlus() {
-		straight("up", 22);
+		straight("down", 45);
 		setPen();
 		straight("left", 30);
 		liftPen();
@@ -1233,7 +1227,7 @@ public class Printing {
 		liftPen();
 		
 		//positioning
-		straight("up", 8);
+		straight("up", 30);
 		straight("left", 15);
 		printSpace();
 	}
@@ -1277,6 +1271,22 @@ public class Printing {
 		
 		//positioning
 		straight("down", 10);
+		printSpace();
+	}
+	
+	private static void printEMark() {
+		setPen();
+		Delay.msDelay(500);
+		liftPen();
+		
+		straight("down", 25);
+		
+		setPen();
+		straight("down", 65);
+		liftPen();
+		
+		//positioning
+		straight("up", 90);
 		printSpace();
 	}
 	
