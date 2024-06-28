@@ -48,6 +48,9 @@ public class MorseInput {
     public static void main(String[] args) {
     
     	//play startmelody
+	//idea 1: implement every single note for melody
+	//idea 2: find a 10sec long melody in wav or mp3 format
+	    //robot.playSample(<tag>, volume);
     	Sound.playTone(1175, 1000, 10);
     	
     	Printing.initialize();
