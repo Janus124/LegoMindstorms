@@ -69,6 +69,8 @@ public class Manager {
 	
     public static void main(String[] args) {
     	
+    	starWarsMelody();
+    	
     	Printing.initialize();
     	
     	while(true) {
@@ -77,7 +79,7 @@ public class Manager {
     		
     		if(modus) {
     			//morsen
-    	    	System.out.println("Start morsing");
+    	    	System.out.println("Start morse code");
     	    	Sound.playTone(1175, 1000, 10);
 
     	    	MorseInput.GetInput();

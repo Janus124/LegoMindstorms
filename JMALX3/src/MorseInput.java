@@ -27,13 +27,6 @@ public class MorseInput {
     static List<String> normalWordArray = new ArrayList<String>();
     static String normalWord= "";
 
-    // Morse code symbols and pauses
-    // . -> short press (1 unit)
-    // - -> long press (3 units)
-    // s -> short pause (1 unit)
-    // l -> long pause (3 units)
-    // w -> very long pause (7 units)
-
     // Time definitions in milliseconds
     static long unit = 1000;
     //static long ShortPress = 2 * unit;
@@ -44,54 +37,6 @@ public class MorseInput {
     //static long pauseWord = 7 * unit;
 
     static long tolerance = unit; //ToDo anpassen
-
-    /*
-    public static void main(String[] args) {
-    
-    	//play startmelody
-		//idea 1: implement every single note for melody
-    	//Star wars melody
-    	starWarsMelody();
-		//idea 2: find a 10sec long melody in wav or mp3 format
-	    //robot.playSample(<tag>, volume);
-    	
-    	//Sound.playTone(1175, 1000, 10);
-    	
-    	//which mode?
-    	//0: morse -> language
-    	//1: morse -> notes
-    	
-    	Printing.initialize();
-    	
-    	
-    	clearOurDisplay();
-    	
-    	
-    	Printing.newLine(4);
-    	
-    	System.out.println("Start morsing");
-    	Sound.playTone(1175, 1000, 10);
-    	
-    	
-        GetInput();
-       	
-    	/*
-    	normalWordArray.add("leo");
-    	normalWordArray.add("strinkt!!");
-    	normalWordArray.add("jonathan");
-    	normalWordArray.add("strinkt");
-    	normalWordArray.add("nicht?");
-    	normalWordArray.add("nur");
-    	normalWordArray.add("sonntags");
-    	normalWordArray.add("nach");
-    	normalWordArray.add("dem");
-    	normalWordArray.add("duschen.");
-    	
-
-        Printing.startPrinting(normalWordArray);
-
-    }
-*/
     
     public static void ourprint() {
     	System.out.println("mw:" + morseLetter + ",nw:" + normalWord);
