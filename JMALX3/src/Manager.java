@@ -87,10 +87,15 @@ public class Manager {
     	       	MorseInput.clearOurDisplay(8);
     	       	
     	        Printing.startPrinting(MorseInput.normalWordArray);
+    	        
+    	        Printing.newLine(1);
+    	        
     		}else {
     			//music
         		MusicInput.readMusicInput();
-        		Printing.startPrintingNotes(musicLetterArray);        		
+        		Printing.startPrintingNotes(musicLetterArray);   
+        		
+        		Printing.newLineNotes(1);
     		}
     		
     		boolean endPrinting = endPrinting();
