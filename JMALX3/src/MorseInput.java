@@ -413,7 +413,7 @@ public class MorseInput {
         LCD.drawString("                                       ", 0, 2);
 }
     
-    public static void clearOurDisplay() {
+    public static void clearOurDisplay(int rowCount) {
     	System.out.println("");
     	System.out.println("");
     	System.out.println("");
