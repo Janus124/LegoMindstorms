@@ -1,4 +1,3 @@
-// If the code is inefficient, consider using StringBuilder
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +20,7 @@ public class MorseInput {
     static EV3TouchSensor touchSensor = new EV3TouchSensor(SensorPort.S3);
     static TouchAdapter adapter = new TouchAdapter(touchSensor);
 
+	
     // List to store morsecode
     static List<String> morseLetterArray = new ArrayList<String>();
     static String morseLetter = "";
@@ -45,6 +45,7 @@ public class MorseInput {
 
     static long tolerance = unit; //ToDo anpassen
 
+    /*
     public static void main(String[] args) {
     
     	//play startmelody
@@ -78,11 +79,12 @@ public class MorseInput {
     	normalWordArray.add("nach");
     	normalWordArray.add("dem");
     	normalWordArray.add("duschen.");
-    	*/
+    	
 
         Printing.startPrinting(normalWordArray);
 
     }
+*/
     
     public static void ourprint() {
     	System.out.println("mw:" + morseLetter + ",nw:" + normalWord);
@@ -151,6 +153,62 @@ public class MorseInput {
             }
         }
     }
+    
+    private static void translateAndAddToNormalWord(String letter) {
+    	letter = translate(letter);
+        normalWord = normalWord + letter;
+    	System.out.println("letter finished: " + letter);
+    }
+    
+    private static int HandlePause(long time) {
+    	//Handle Pause
+        if (time <= pauseSymbol) {
+        	//Info: normal Pause between Letters
+            morseLetter += "";
+
+        } else if (time <= pauseLetter) {
+        	//
+            translateAndAddToNormalWord(morseLetter);
+            morseLetter = "";
+            
+            //System.out.println(normalWord);
+            ourprint();
+
+
+        } else if (time > pauseLetter) {
+            // Word finished            
+        	if("...-.-l" == morseLetter || ("...-.-" == morseLetter) || morseLetter.length() > 8) {
+        		//end
+        		System.out.println("Ende");
+        		morseLetter = "";
+                normalWord = "";
+        		return 0;
+        	}
+        	//finish word
+            String letter = morseLetter;
+            letter = translate(letter);
+            normalWord = normalWord + letter;
+        	
+        	System.out.println("Word finished: " + normalWord);
+        	saveWordToArray();
+        	
+        	
+        	/*
+        	if(currWord.length() == 7 || currWord.length() >= 9 || (currWord.length() == 8 && currWord != "remove")) {
+        		System.out.println("Error: wrong type");
+        	}
+        	*/
+            normalWord = "";
+            morseLetter = "";
+            ourprint();
+        } else {
+            //System.out.println("Error 1");
+            return -1;
+        }
+        
+       return 1;
+    	
+    }
 
 	//Converts the time with the type into the correct symbols of the morsecode
 	//type = "pause" or "pressed"
@@ -162,52 +220,10 @@ public class MorseInput {
     	//System.out.println(type + ": " + time);
     	
     	if (type.equals("pause")) {
-            if (time <= pauseSymbol) {
-                morseLetter += "";
-
-            } else if (time <= pauseLetter) {
-            	//System.out.println("puaseLetter");
-                //Letter finished
-                String letter = morseLetter;
-                letter = translate(letter);
-                normalWord = normalWord + letter;
-            	System.out.println("letter finished: " + letter);
-                morseLetter = "";
-                //System.out.println(normalWord);
-                ourprint();
-
-
-            } else if (time > pauseLetter) {
-                // Word finished            
-            	if("...-.-l" == morseLetter || ("...-.-" == morseLetter) || morseLetter.length() > 8) {
-            		//end
-            		System.out.println("Ende");
-            		morseLetter = "";
-                    normalWord = "";
-            		return 0;
-            	}
-            	//finish word
-                String letter = morseLetter;
-                letter = translate(letter);
-                normalWord = normalWord + letter;
-            	
-            	System.out.println("Word finished: " + normalWord);
-            	saveWordToArray();
-            	
-            	
-            	/*
-            	if(currWord.length() == 7 || currWord.length() >= 9 || (currWord.length() == 8 && currWord != "remove")) {
-            		System.out.println("Error: wrong type");
-            	}
-            	*/
-                normalWord = "";
-                morseLetter = "";
-                ourprint();
-            } else {
-                //System.out.println("Error 1");
-                return -1;
-            }
+    		return HandlePause(time);
+    		
         } else if (type.equals("pressed")) {
+        	//Handle Press
             if (time < LongPress) {
             	//Sound.beep();
             	System.out.println("shortPress");
@@ -332,7 +348,7 @@ public class MorseInput {
         LCD.drawString("                                       ", 0, 2);
 }
     
-    private static void clearOurDisplay() {
+    public static void clearOurDisplay() {
     	System.out.println("");
     	System.out.println("");
     	System.out.println("");
