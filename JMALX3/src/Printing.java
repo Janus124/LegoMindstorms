@@ -41,16 +41,24 @@ public class Printing {
 	static int notesInLine = 0;
 	static final int MaxNotesInLine = 10;
 	
+    public static void main(String[] args) {
+    	initialize();
+    	//newLineNotes(4);
+    	List<String> notesList = new ArrayList<String>();
+    	notesList.add("cdefgah");
+    	
+    	startPrintingNotes(notesList);
+    
+    }
 	
-	
+	//endet links unten (wo auch angefangen wird)(wenn blatt im drucker rechts oben)
 	static final void musicGrid() {
 		
 		//1
 		setPen();
-		straight("right", 1200);
+		straight("left", 1200);
 		liftPen();
 		
-		straight("left", 1200);
 		straight("up", unit);
 		
 		//2
@@ -58,15 +66,13 @@ public class Printing {
 		straight("right", 1200);
 		liftPen();
 		
-		straight("left", 1200);
 		straight("up", unit);
 		
 		//3
 		setPen();
-		straight("right", 1200);
+		straight("left", 1200);
 		liftPen();
 		
-		straight("left", 1200);
 		straight("up", unit);
 		
 		//4
@@ -74,77 +80,95 @@ public class Printing {
 		straight("right", 1200);
 		liftPen();
 		
-		straight("left", 1200);
 		straight("up", unit);
 		
 		//5
 		setPen();
-		straight("right", 1200);
+		straight("left", 1200);
 		liftPen();
 		
-		straight("left", 1200);
-		straight("down", 4* unit);
-		//endet links unten (wo auch angefangen wird)
+		x0();
 
 	}
 	
-	private static void moveright() {
-		straight("right", unit);
+	private static void spaceBetween() {
+		straight("left", 2* unit);
 	}
 	
 	
 	private static void printNote() {
 		
 		setPen();
-		straight("left", unit);
-		straight("down", unit);
 		straight("right", unit);
-		straight("up", 2*unit);
+		straight("up", unit);
+		straight("left", unit);
+		straight("down", 2*unit);
 		liftPen();
 				
-		straight("right", 2*unit);
+		straight("left", 2*unit);
+		straight("up", unit);
+	}
+	
+	private static void addCLine() {
+		//print additional line
+		straight("up", unit);
+		straight("left", 15);
+		setPen();
+		straight("right", 70);
+		liftPen();
+		
+		straight("left", 55);
 		straight("down", unit);
 	}
 	
 	private static void noteC(){
-		straight("down", (int) 0.5* unit);
+		addCLine();
+		straight("up", 20);
 		printNote();
+		straight("down", 20);
 	}
 	
 	private static void noteD(){
-		straight("down", (int) 1* unit);
 		printNote();
 	}
 	
 	private static void noteE(){
-		straight("down", (int) 1.5* unit);
+		straight("down", 20);
 		printNote();
+		straight("up", 20);
 	}
 	
 	private static void noteF(){
-		straight("down", (int) 2* unit);
+		straight("down", 40);
 		printNote();
+		straight("up", 40);
 	}
 	
 	private static void noteG(){
-		straight("down", (int) 2.5* unit);
+		straight("down", 60);
 		printNote();
+		straight("up", 60);
 	}
 	
 	private static void noteA(){
-		straight("down", (int) 3* unit);
+		straight("down", 80);
 		printNote();
+		straight("up", 80);
 	}
 	
 	private static void noteH(){
-		straight("down", (int) 3.5* unit);
+		straight("down", 100);
 		printNote();
+		straight("up", 100);
 	}
 	
 	
 	public static void startPrintingNotes(List<String> notes) {
+		
+		//initialisieren
 		musicGrid();
 		
+		spaceBetween();
 		
 		String word;
 		for(int i = 0; i < notes.size(); i++) {
@@ -164,8 +188,7 @@ public class Printing {
 		if(notesInLine >= MaxNotesInLine) {
 			newLineNotes(1);
 			musicGrid();
-			moveright();
-			moveright();
+			spaceBetween();
 		}
 		
 		switch(note) {
@@ -183,35 +206,39 @@ public class Printing {
 			break;
 		case 'f':
 			notesInLine++;
-			noteC();			
+			noteF();			
 			break;
 		case 'g':
 			notesInLine++;
-			noteC();			
+			noteG();			
 			break;
 		case 'a':
 			notesInLine++;
-			noteC();			
+			noteA();			
 			break;
 		case 'h':
 			notesInLine++;
-			noteC();			
+			noteH();			
 			break;
-
-		
-		
 		}
-	}
-	
-	private static void newNoteGrid() {
-		
 	}
 	
 	public static void newLineNotes(int number) {
 		for(int i = 0; i < number; i++) {
-			straight("up", 200);	
+			straight("up", 220);	//normales newLine ist 180
 		}
 		
+		motorX.forward();
+		
+		while(true) {
+			if(penAdapter.isPressed()) {
+				motorX.stop();
+				break;
+			}
+		}		
+	}
+	
+	private static void x0() {
 		motorX.forward();
 		
 		while(true) {
