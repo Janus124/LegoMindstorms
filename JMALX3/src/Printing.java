@@ -41,6 +41,7 @@ public class Printing {
 	static int notesInLine = 0;
 	static final int MaxNotesInLine = 10;
 	
+	/*
     public static void main(String[] args) {
     	initialize();
     	//newLineNotes(4);
@@ -50,6 +51,7 @@ public class Printing {
     	startPrintingNotes(notesList);
     
     }
+    */
 	
 	//endet links unten (wo auch angefangen wird)(wenn blatt im drucker rechts oben)
 	static final void musicGrid() {

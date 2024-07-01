@@ -39,10 +39,13 @@ public class MorseInput {
     static long tolerance = unit; //ToDo anpassen
     
     public static void ourprint() {
+    	System.out.println("curr Word:"+ normalWord);
+    	/*
     	System.out.println("mw:" + morseLetter + ",nw:" + normalWord);
     	for(int i = 0; i < normalWordArray.size(); i ++) {
     		System.out.println(normalWordArray.get(i) + ", ");
     	}
+    	*/
 		
     }
     
@@ -65,7 +68,7 @@ public class MorseInput {
         		normalWordArray.add(normalWord);
 				break;
 			}
-        	printCurrWord();
+        	//printCurrWord();
         	
 
             if (adapter.isPressed()) {
@@ -112,11 +115,16 @@ public class MorseInput {
     		return 0;
     	}
         normalWord = normalWord + letter;
-    	System.out.println("letter finished: " + letter);
+    	System.out.println("letter translated: " + letter);
     	return 1;
     }
     
     private static int HandlePause(long time) {
+    	/*
+    	0-2 sec 	= pause zwischen Morsezeichen
+    	2-4 sec		= pause zwischen Buchstaben
+    	4+			= pause zwischen Wörtern
+    	*/
     	//Handle Pause
         if (time <= pauseSymbol) {
         	//Info: normal Pause between Letters
@@ -158,6 +166,7 @@ public class MorseInput {
             normalWord = "";
             morseLetter = "";
             ourprint();
+            
         }
        return 1;
     	
@@ -166,14 +175,18 @@ public class MorseInput {
     
     private static int HandlePress(long time) {
     	//Handle Press
+    	/*
+    	0-1 sec 	= kurz
+    	1+ 		 	= lang
+    	 */
         if (time < LongPress) {
         	//Sound.beep();
-        	System.out.println("shortPress");
+        	System.out.print("s ");
             // Dot
             morseLetter += ".";
         } else if (time >= LongPress) {
             // Dash
-        	System.out.println("long press");
+        	System.out.print("l ");
             morseLetter += "-";
         }
     	

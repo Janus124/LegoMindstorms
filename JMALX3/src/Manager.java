@@ -72,6 +72,7 @@ public class Manager {
     	starWarsMelody();
     	
     	Printing.initialize();
+		MorseInput.clearOurDisplay(8);
     	
     	while(true) {
     		boolean modus = modusSelection();
