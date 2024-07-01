@@ -17,51 +17,29 @@ import lejos.robotics.Color;
 import lejos.robotics.ColorAdapter;
 
 public class MusicInput {
-	static EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S4);
-	static ColorAdapter musicInputAdapter = new ColorAdapter(colorSensor);
+
+	static String[] noteList = {"c", "d", "e", "f", " ", " ", "g", "a", "h"};
 	
-	static List<String> musicLetterArray = new ArrayList<String>();
-	static String c = "c";
-	static String d = "d";
-	static String e = "e";
-	static String f = "f";
-	static String g = "g";
-	static String a = "a";
-	static String h = "h";
-	
-	static void readMusicInput() {
+	public static void readMusicInput() {
 		
-		while(musicLetterArray.size() < 10) {
-			//red 0, green 1, blue 2, yellow 3, , white 6, black 7
-			int color = musicInputAdapter.getColorID();
+		while(true) {
+			//red 0 = c, green 1 = d, blue 2 = e, yellow 3 = f, , white 6 = g, black 7 = a
+			int color = Manager.musicInputAdapter.getColorID();
 			
-			//System.out.println("Color Before: " + colorBefore);
-			//System.out.println("Color: " + color);
-			
-			if(color == 0) {
-				askForConsent(c);
-				musicLetterArray.add(c);
-			}else if(color == 1){
-				askForConsent(d);
-				musicLetterArray.add(d);
-			}else if(color == 2){
-				askForConsent(e);
-				musicLetterArray.add(e);
-			}else if(color == 3){
-				askForConsent(f);
-				musicLetterArray.add(f);
-			}else if(color == 6){
-				askForConsent(g);
-				musicLetterArray.add(g);
-			}else if(color == 7){
-				askForConsent(a);
-				musicLetterArray.add(a);
+			if(color == 0 || color == 1 || color == 2 || color == 3 || color == 6 || color == 7) {
+				String note = noteList[color];
+				int selection = askForConsent(note);
+				if(selection == 0) {
+					Manager.musicLetterArray.add(note);
+				} else if(selection == 2) {
+					return;
+				}
 			}
 			
 			MorseInput.clearOurDisplay(8);		
 			
-			for(int i = 0; i < musicLetterArray.size(); i++) {
-				System.out.print(musicLetterArray.get(i));
+			for(int i = 0; i < Manager.musicLetterArray.size(); i++) {
+				System.out.print(Manager.musicLetterArray.get(i));
 			}
 			
 			System.out.println();
@@ -69,21 +47,23 @@ public class MusicInput {
 			Delay.msDelay(1000);
 			
 		}
-		
-		
-		Delay.msDelay(5000);
+
 	}
 	
-	static boolean askForConsent(String color) {
+	static int askForConsent(String color) {
 		System.out.println("Add note: \"" + color + "\"?");
 		System.out.println("Left: YES");
 		System.out.println("Right: NO");
+		System.out.println("Up: PRINT");
+    	System.out.println();
 		
 		while(true) {
 			if(Button.LEFT.isDown()) {
-				return true;
+				return 0;
 			} else if(Button.RIGHT.isDown()) {
-				return false;
+				return 1;
+			} else if(Button.UP.isDown()) {
+				return 2;
 			}
 		}
 		
