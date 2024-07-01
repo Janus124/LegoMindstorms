@@ -33,6 +33,198 @@ public class Printing {
 	static volatile int xCounter;
 	
 	
+	//-------------
+	//Music Printing
+	
+	static final int linelenght = 1200;
+	static final int unit = 40;
+	static int notesInLine = 0;
+	static final int MaxNotesInLine = 10;
+	
+	
+	
+	static final void musicGrid() {
+		
+		//1
+		setPen();
+		straight("right", 1200);
+		liftPen();
+		
+		straight("left", 1200);
+		straight("up", unit);
+		
+		//2
+		setPen();
+		straight("right", 1200);
+		liftPen();
+		
+		straight("left", 1200);
+		straight("up", unit);
+		
+		//3
+		setPen();
+		straight("right", 1200);
+		liftPen();
+		
+		straight("left", 1200);
+		straight("up", unit);
+		
+		//4
+		setPen();
+		straight("right", 1200);
+		liftPen();
+		
+		straight("left", 1200);
+		straight("up", unit);
+		
+		//5
+		setPen();
+		straight("right", 1200);
+		liftPen();
+		
+		straight("left", 1200);
+		straight("down", 4* unit);
+		//endet links unten (wo auch angefangen wird)
+
+	}
+	
+	private static void moveright() {
+		straight("right", unit);
+	}
+	
+	
+	private static void printNote() {
+		
+		setPen();
+		straight("left", unit);
+		straight("down", unit);
+		straight("right", unit);
+		straight("up", 2*unit);
+		liftPen();
+				
+		straight("right", 2*unit);
+		straight("down", unit);
+	}
+	
+	private static void noteC(){
+		straight("down", (int) 0.5* unit);
+		printNote();
+	}
+	
+	private static void noteD(){
+		straight("down", (int) 1* unit);
+		printNote();
+	}
+	
+	private static void noteE(){
+		straight("down", (int) 1.5* unit);
+		printNote();
+	}
+	
+	private static void noteF(){
+		straight("down", (int) 2* unit);
+		printNote();
+	}
+	
+	private static void noteG(){
+		straight("down", (int) 2.5* unit);
+		printNote();
+	}
+	
+	private static void noteA(){
+		straight("down", (int) 3* unit);
+		printNote();
+	}
+	
+	private static void noteH(){
+		straight("down", (int) 3.5* unit);
+		printNote();
+	}
+	
+	
+	public static void startPrintingNotes(List<String> notes) {
+		musicGrid();
+		
+		
+		String word;
+		for(int i = 0; i < notes.size(); i++) {
+			//get word
+			word = notes.get(i);
+			//iterate over string and print every character
+			for(int j = 0; j < word.length(); j++) {
+				printNotes(word.charAt(j));
+			}
+		}
+
+	}
+		
+	private static void printNotes(char note) {
+		
+		//check if note fits in this line
+		if(notesInLine >= MaxNotesInLine) {
+			newLineNotes(1);
+			musicGrid();
+			moveright();
+			moveright();
+		}
+		
+		switch(note) {
+		case 'c':
+			notesInLine++;
+			noteC();			
+			break;
+		case 'd':
+			notesInLine++;
+			noted();			
+			break;
+		case 'e':
+			notesInLine++;
+			notee();			
+			break;
+		case 'f':
+			notesInLine++;
+			noteC();			
+			break;
+		case 'g':
+			notesInLine++;
+			noteC();			
+			break;
+		case 'a':
+			notesInLine++;
+			noteC();			
+			break;
+		case 'h':
+			notesInLine++;
+			noteC();			
+			break;
+
+		
+		
+		}
+	}
+	
+	private static void newNoteGrid() {
+		
+	}
+	
+	public static void newLineNotes(int number) {
+		for(int i = 0; i < number; i++) {
+			straight("up", 200);	
+		}
+		
+		motorX.forward();
+		
+		while(true) {
+			if(penAdapter.isPressed()) {
+				motorX.stop();
+				break;
+			}
+		}		
+	}
+	//---------------
+	
+	
+	
 	/*TODO:
 	 * 4. Schnittstelle Testlauf
 	*/
@@ -1305,3 +1497,5 @@ public class Printing {
 		
 	}
 }
+
+//---------------------------------------------
