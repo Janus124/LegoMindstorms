@@ -44,14 +44,61 @@ public class MorseInput {
     //static long pauseWord = 7 * unit;
 
     static long tolerance = unit; //ToDo anpassen
+    
+    //TODO: fill out
+    static int[] notes = {262, 294, 330, 349, 392, 440, 494, 
+    		523, 587, 660, 698, 784, 880, 988, 
+    		1047, 1175, 1319, 1397, 1568, 1760, 1976,
+    		2093, 2349, 2637, 2794, 3136, 3520, 3951, 4186};
+    
+    //overview of notesname -> frequenz
+    /*
+    ---> (notation in english)
+    notes[0]: NOTE_C4 = 262;
+    notes[1]: NOTE_D4 = 294;
+    notes[2]: NOTE_E4 = 330;
+    notes[3]: NOTE_F4 = 349;
+    notes[4]: NOTE_G4 = 392;
+    notes[5]: NOTE_A4 = 440;
+    notes[6]: NOTE_B4 = 494;
+    notes[7]: NOTE_C5 = 523;
+    notes[8]: NOTE_D5 = 587;
+    notes[9]: NOTE_E5 = 660;
+    notes[10]: NOTE_F5 = 698;
+    notes[11]: NOTE_G5 = 784;
+    notes[12]: NOTE_A5 = 880;
+    notes[13]: NOTE_B5 = 988;
+    notes[14]: NOTE_C6 = 1047;
+    notes[15]: NOTE_D6 = 1175;
+    notes[16]: NOTE_E6 = 1319;
+    notes[17]: NOTE_F6 = 1397;
+    notes[18]: NOTE_G6 = 1568;
+    notes[19]: NOTE_A6 = 1760;
+    notes[20]: NOTE_B6 = 1976;
+    notes[21]: NOTE_C7 = 2093;
+    notes[22]: NOTE_D7 = 2349;
+    notes[23]: NOTE_E7 = 2637;
+    notes[24]: NOTE_F7 = 2794;
+    notes[25]: NOTE_G7 = 3136;
+    notes[26]: NOTE_A7 = 3520;
+    notes[27]: NOTE_B7 = 3951;  
+    notes[28]: NOTE_C8 = 4186 
+    */
 
     public static void main(String[] args) {
     
     	//play startmelody
-	//idea 1: implement every single note for melody
-	//idea 2: find a 10sec long melody in wav or mp3 format
+		//idea 1: implement every single note for melody
+    	//Star wars melody
+    	starWarsMelody();
+		//idea 2: find a 10sec long melody in wav or mp3 format
 	    //robot.playSample(<tag>, volume);
-    	Sound.playTone(1175, 1000, 10);
+    	
+    	//Sound.playTone(1175, 1000, 10);
+    	
+    	//which mode?
+    	//0: morse -> language
+    	//1: morse -> notes
     	
     	Printing.initialize();
     	
@@ -159,7 +206,7 @@ public class MorseInput {
     //0 end
     //1 continue
     public static int HandleInput(String type, long time) {
-    	//System.out.println(type + ": " + time);
+    	//System.out.println(type + ": " + time);Sound.playTone
     	
     	if (type.equals("pause")) {
             if (time <= pauseSymbol) {
@@ -270,7 +317,6 @@ public class MorseInput {
 			    "-----", ".-.-.-", "--..--", "..--..", ".----.", "-..-.", "---...", "-.-.-.", ".-.-.", "-....-", "-...-", "......", "........",
 			    ".......", "..--"
 			};
-		String normalLetter = "";
         int idx = Arrays.asList(morse).indexOf(letter);
         //System.out.print(idx);
         if(idx == -1) {
@@ -303,6 +349,25 @@ public class MorseInput {
 	        }
         }
 
+    public static int translateNotes(String input) {
+    	String[] morse = {".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", 
+			    ".---", "-.-", ".-..", "--", "-.", "---", ".---.", "--.-", ".-.",
+			    "-", "...", "..-", "...-", ".--", "-..-", "-.--", "--..", ".----",
+			    "..---", "...--"
+			    /*, "....-", ".....", "-....", "--...", "---..", "----.",
+			    "-----", ".-.-.-", "--..--", "..--..", ".----.", "-..-.", "---...", "-.-.-.", ".-.-.", "-....-", "-...-", "......", "........",
+			    ".......", "..--"*/
+			};
+    	int idx = Arrays.asList(morse).indexOf(input);
+    	if(idx == -1) {
+    		//error: not found
+            return -1;
+        } else {
+        	//return either: note or idx for notes?
+        	int note = notes[idx];
+        	return note;
+        }
+    }
     
     public static void printCurrWord() {
     	LCD.drawString(normalWord, 0, 0);
@@ -347,4 +412,24 @@ public class MorseInput {
     	System.out.println("");
     }
 	
+    private static void starWarsMelody() {
+    	Sound.playTone(notes[0], 1000, 10);
+    	Sound.playTone(notes[4], 1000, 10);
+    	Sound.playTone(notes[3], 167, 10);
+    	Sound.playTone(notes[2], 167, 10);
+    	Sound.playTone(notes[1], 167, 10);
+    	Sound.playTone(notes[7], 1000, 10);
+    	Sound.playTone(notes[4], 500, 10);
+    	
+    	Sound.playTone(notes[3], 167, 10);
+    	Sound.playTone(notes[2], 167, 10);
+    	Sound.playTone(notes[1], 167, 10);
+    	Sound.playTone(notes[7], 1000, 10);
+    	Sound.playTone(notes[4], 500, 10);
+
+    	Sound.playTone(notes[3], 167, 10);
+    	Sound.playTone(notes[2], 167, 10);
+    	Sound.playTone(notes[3], 167, 10);
+    	Sound.playTone(notes[1], 1500, 10);
+    }
 }
