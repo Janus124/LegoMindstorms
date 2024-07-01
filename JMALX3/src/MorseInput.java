@@ -201,10 +201,14 @@ public class MorseInput {
         }
     }
     
-    private static void translateAndAddToNormalWord(String letter) {
+    private static int translateAndAddToNormalWord(String letter) {
     	letter = translate(letter);
+    	if(letter == "ende") {
+    		return 0;
+    	}
         normalWord = normalWord + letter;
     	System.out.println("letter finished: " + letter);
+    	return 1;
     }
     
     private static int HandlePause(long time) {
@@ -215,7 +219,9 @@ public class MorseInput {
 
         } else if (time <= pauseLetter) {
         	//
-            translateAndAddToNormalWord(morseLetter);
+        	if(translateAndAddToNormalWord(morseLetter) == 0)
+        		return 0;
+        	
             morseLetter = "";
             
             //System.out.println(normalWord);
@@ -232,9 +238,8 @@ public class MorseInput {
         		return 0;
         	}
         	//finish word
-            String letter = morseLetter;
-            letter = translate(letter);
-            normalWord = normalWord + letter;
+        	if(translateAndAddToNormalWord(morseLetter) == 0)
+        		return 0;
         	
         	System.out.println("Word finished: " + normalWord);
         	saveWordToArray();
@@ -248,15 +253,27 @@ public class MorseInput {
             normalWord = "";
             morseLetter = "";
             ourprint();
-        } else {
-            //System.out.println("Error 1");
-            return -1;
         }
-        
        return 1;
     	
     }
 
+    
+    private static int HandlePress(long time) {
+    	//Handle Press
+        if (time < LongPress) {
+        	//Sound.beep();
+        	System.out.println("shortPress");
+            // Dot
+            morseLetter += ".";
+        } else if (time >= LongPress) {
+            // Dash
+        	System.out.println("long press");
+            morseLetter += "-";
+        }
+    	
+    	return 1;
+    }
 	//Converts the time with the type into the correct symbols of the morsecode
 	//type = "pause" or "pressed"
 	//time = lenght of the duration pressed or not pressed
@@ -270,37 +287,17 @@ public class MorseInput {
     		return HandlePause(time);
     		
         } else if (type.equals("pressed")) {
-        	//Handle Press
-            if (time < LongPress) {
-            	//Sound.beep();
-            	System.out.println("shortPress");
-                // Dot
-                morseLetter += ".";
-            } else if (time >= LongPress) {
-                // Dash
-            	System.out.println("long press");
-                morseLetter += "-";
-            } else {
-                //System.out.println("Error: wrong time in HandleInput pressed");
-                
-            }
+        	return HandlePress(time);
+ 
         } else {
             //System.out.println("Error: wrong type");
             return -1;
         }
-        
-    	//System.out.println("ml: " + morseLetter + "$" + normalWord);
-        return 1;
     }
 
     public static void saveWordToArray() {
     	//add word to final array
         normalWordArray.add(normalWord);
-    }
-    
-	//checks if the number num is withing a tolerance of expected
-    public static boolean LongInRadius(long num, long expected) {
-        return expected - tolerance < num && expected + tolerance > num;
     }
     
     public static String translate(String letter) {
@@ -341,6 +338,7 @@ public class MorseInput {
         } else {
         	String normal = language[idx];
         	if(normal == "removeLetter") {
+        		//Remove last Letter
         		//System.out.println("rl: " + normalWord.length());
         		if(normalWord.length() == 0) { //Error Fall
         			normalWord = "";
@@ -349,12 +347,12 @@ public class MorseInput {
         		}
         		return "";
 	        } else if (normal == "removeWord"){
+	        	//Remove last Word
 	        		if (!normalWordArray.isEmpty()) {
 	        			normalWordArray.remove(normalWordArray.size()-1);
 	        		}
 	        		return "";
 	  
-	        	
 	        } else if(normal == "ende"){
 	        	return "";
 	        	
@@ -364,68 +362,19 @@ public class MorseInput {
 	            return language[idx];
 	        }
         }
-
-    public static int translateNotes(String input) {
-    	String[] morse = {".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", 
-			    ".---", "-.-", ".-..", "--", "-.", "---", ".---.", "--.-", ".-.",
-			    "-", "...", "..-", "...-", ".--", "-..-", "-.--", "--..", ".----",
-			    "..---", "...--"
-			    /*, "....-", ".....", "-....", "--...", "---..", "----.",
-			    "-----", ".-.-.-", "--..--", "..--..", ".----.", "-..-.", "---...", "-.-.-.", ".-.-.", "-....-", "-...-", "......", "........",
-			    ".......", "..--"*/
-			};
-    	int idx = Arrays.asList(morse).indexOf(input);
-    	if(idx == -1) {
-    		//error: not found
-            return -1;
-        } else {
-        	//return either: note or idx for notes?
-        	int note = notes[idx];
-        	return note;
-        }
-    }
     
-    public static void printCurrWord() {
+    private static void printCurrWord() {
     	LCD.drawString(normalWord, 0, 0);
     	
     	//LCD.drawString(normalWordArray.get(normalWordArray.size()-1), 0, 1);
     	return;
     }
     
-    public static void old_printTime(long l, String type) {
-    	if(l % 100 == 0) {
-	    	//System.out.println("printTime1");
-	    	if(l < 1000) {
-	    		//System.out.println("printTime2");
-	    		LCD.drawString("0" + Long.toString(l) + "$" + type, 0, 0);
-	    	}else {
-	    		//System.out.println("printTime3");
-	    		LCD.drawString(Long.toString(l) + "$" + type, 0, 0);
-	    	}
-	    	LCD.drawString(morseLetter, 0, 1);
-	    	LCD.drawString(normalWord, 0, 2);
+    public static void clearOurDisplay(int num) {
+    	
+    	for(int i = 0; i < num; i++) {
+        	System.out.println("");
     	}
-    }
-    
-    public static void old_resetDisplay() {
-       	LCD.drawString("                                       ", 0, 0);
-        LCD.drawString("                                       ", 0, 1);
-        LCD.drawString("                                       ", 0, 2);
-}
-    
-    public static void clearOurDisplay(int rowCount) {
-    	System.out.println("");
-    	System.out.println("");
-    	System.out.println("");
-    	System.out.println("");
-    	System.out.println("");
-    	System.out.println("");
-    	System.out.println("");
-    	System.out.println("");
-    	System.out.println("");
-    	System.out.println("");
-    	System.out.println("");
-    	System.out.println("");
     }
 	
     private static void starWarsMelody() {
