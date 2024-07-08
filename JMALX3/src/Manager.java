@@ -25,14 +25,13 @@ import lejos.hardware.Sound;
 
 public class Manager {
 	//variable for music notes
-	static EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S4);
+	static EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S1);
 	static ColorAdapter musicInputAdapter = new ColorAdapter(colorSensor);
 	public static List<String> musicLetterArray = new ArrayList<String>();
 	
 	//variables for printing
 	
 	//music
-	//TODO: fill out
     static int[] notes = {262, 294, 330, 349, 392, 440, 494, 
     		523, 587, 660, 698, 784, 880, 988, 
     		1047, 1175, 1319, 1397, 1568, 1760, 1976,
@@ -76,12 +75,10 @@ public class Manager {
     public static void main(String[] args) {
     	
     	
-    	//starWarsMelody();
+    	starWarsMelody();
     	
     	Printing.initialize();
 		MorseInput.clearOurDisplay(8);
-		
-		Printing.newLine(2);
     	
     	while(true) {
     		boolean modus = modusSelection();
@@ -97,9 +94,9 @@ public class Manager {
     	       	MorseInput.clearOurDisplay(8);
 
     	       	
-    	        Printing.startPrinting(deleateEmptyStrings(MorseInput.normalWordArray));
+    	        Printing.startPrinting(deleteEmptyStrings(MorseInput.normalWordArray));
     	        
-    	        Printing.newLine(1); //TODO: immer 1?
+    	        Printing.newLine(1);
     	        
     		}else {
     			//music
@@ -122,25 +119,20 @@ public class Manager {
     		MorseInput.normalWordArray = new ArrayList<String>();
     		MorseInput.normalWord= "";
     		
-    	//play startmelody
-		//idea 1: implement every single note for melody
-		//idea 2: find a 10sec long melody in wav or mp3 format
-	    //robot.playSample(<tag>, volume);
-    	/*Sound.playTone(1175, 1000, 10);*/	
     	}
     }
     
     private static boolean modusSelection(){
     	System.out.println("Modus:");
-    	System.out.println("Left: MORSEN");
-    	System.out.println("Right: MUSIC");
+    	System.out.println("Left: MUSIC");
+    	System.out.println("Right: MORSEN");
     	System.out.println();
     	
 		while(true) {
 			if(Button.LEFT.isDown()) {
-				return true;
-			} else if(Button.RIGHT.isDown()) {
 				return false;
+			} else if(Button.RIGHT.isDown()) {
+				return true;
 			}
 		}
     }
@@ -181,7 +173,7 @@ public class Manager {
     	Sound.playTone(notes[1], 1500, 10);
     }
 
-    private static List<String> deleateEmptyStrings(List<String> arr){
+    private static List<String> deleteEmptyStrings(List<String> arr){
     	List<String> clearedArr = new ArrayList<String>();
     	
     	for (String s: arr) {

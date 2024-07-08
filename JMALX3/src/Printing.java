@@ -22,7 +22,7 @@ public class Printing {
 	public static EV3MediumRegulatedMotor motorZ = new EV3MediumRegulatedMotor(MotorPort.C);
 	
 	//to calibrate pen in zero-position on x-axis
-	static EV3TouchSensor touchSensor = new EV3TouchSensor(SensorPort.S1);
+	static EV3TouchSensor touchSensor = new EV3TouchSensor(SensorPort.S4);
 	static TouchAdapter penAdapter = new TouchAdapter(touchSensor);
 	
 	//Feed sheet into printer until it is not covering the sensor anymore, then reach start position
