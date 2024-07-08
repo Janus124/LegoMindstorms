@@ -39,19 +39,7 @@ public class Printing {
 	static final int linelenght = 1200;
 	static final int unit = 40;
 	static int notesInLine = 0;
-	static final int MaxNotesInLine = 10;
-	
-	/*
-    public static void main(String[] args) {
-    	initialize();
-    	//newLineNotes(4);
-    	List<String> notesList = new ArrayList<String>();
-    	notesList.add("cdefgah");
-    	
-    	startPrintingNotes(notesList);
-    
-    }
-    */
+	static final int MaxNotesInLine = 15;
 	
 	//endet links unten (wo auch angefangen wird)(wenn blatt im drucker rechts oben)
 	static final void musicGrid() {

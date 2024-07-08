@@ -18,15 +18,16 @@ import lejos.robotics.ColorAdapter;
 
 public class MusicInput {
 
-	static String[] noteList = {"c", "d", "e", "f", " ", " ", "g", "a", "h"};
+	static String[] noteList = {"c", "d", "e", "f", " ", " ", "g", "a", " ", " ", " ", " ", " ", "h"};
 	
 	public static void readMusicInput() {
 		
 		while(true) {
-			//red 0 = c, green 1 = d, blue 2 = e, yellow 3 = f, , white 6 = g, black 7 = a
+			//red 0 = c, green 1 = d, blue 2 = e, yellow 3 = f, , white 6 = g, black 7 = a, brown = 13
 			int color = Manager.musicInputAdapter.getColorID();
+			System.out.println(color);
 			
-			if(color == 0 || color == 1 || color == 2 || color == 3 || color == 6 || color == 7) {
+			if(color == 0 || color == 1 || color == 2 || color == 3 || color == 6 || color == 7 || color == 13) {
 				String note = noteList[color];
 				int selection = askForConsent(note);
 				if(selection == 0) {

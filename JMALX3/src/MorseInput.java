@@ -36,7 +36,6 @@ public class MorseInput {
     //static long pauseWord = 7 * unit;
      */
 
-    
     public static void ourprint() {
     	System.out.println("curr W:"+ normalWord);
     	for(int i = 0; i < normalWordArray.size(); i ++) {
@@ -55,6 +54,7 @@ public class MorseInput {
 
         while (true) {
         	//waiting for press
+        	//TODO: Wofür ist das?
         	if(Button.ENTER.isDown()) {
         		normalWordArray.add(normalWord);
 				break;
@@ -100,8 +100,6 @@ public class MorseInput {
     	if(letter == "ende") {
     		return 0;
     	}
-        normalWord = normalWord + letter;
-    	System.out.println("new: " + letter + "\n");
     	return 1;
     }
    
@@ -223,7 +221,7 @@ public class MorseInput {
         		} else {
         			normalWord = normalWord.substring(0, normalWord.length()-1);
         		}
-        		return "";
+        		return normalWord;
 	        } else if (translatedLetter == "removeWord"){
 	        	//Remove last Word
         		System.out.println("deleted Word");
@@ -231,14 +229,14 @@ public class MorseInput {
 	        		if (!normalWordArray.isEmpty()) {
 	        			normalWordArray.remove(normalWordArray.size()-1);
 	        		}
-	        		return "";
-	  
+	        		return normalWord;
 	        } else if(translatedLetter == "ende"){
 	        	return "ende";
-	        	
 	        }
         	//normal case
-	         return translatedLetter;
+        	System.out.println("new: " + translatedLetter + "\n");
+        	normalWord += translatedLetter;
+	        return normalWord;
 	    }
     }
     
