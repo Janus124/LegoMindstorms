@@ -17,9 +17,9 @@ import lejos.robotics.ColorAdapter;
 
 public class Printing {
 	
-	static EV3LargeRegulatedMotor motorX = new EV3LargeRegulatedMotor(MotorPort.A);
-	static EV3LargeRegulatedMotor motorY = new EV3LargeRegulatedMotor(MotorPort.B);
-	static EV3MediumRegulatedMotor motorZ = new EV3MediumRegulatedMotor(MotorPort.C);
+	public static EV3LargeRegulatedMotor motorX = new EV3LargeRegulatedMotor(MotorPort.A);
+	public static EV3LargeRegulatedMotor motorY = new EV3LargeRegulatedMotor(MotorPort.B);
+	public static EV3MediumRegulatedMotor motorZ = new EV3MediumRegulatedMotor(MotorPort.C);
 	
 	//to calibrate pen in zero-position on x-axis
 	static EV3TouchSensor touchSensor = new EV3TouchSensor(SensorPort.S1);
@@ -41,6 +41,7 @@ public class Printing {
 	static int notesInLine = 0;
 	static final int MaxNotesInLine = 10;
 	
+	/*
     public static void main(String[] args) {
     	initialize();
     	//newLineNotes(4);
@@ -50,6 +51,7 @@ public class Printing {
     	startPrintingNotes(notesList);
     
     }
+    */
 	
 	//endet links unten (wo auch angefangen wird)(wenn blatt im drucker rechts oben)
 	static final void musicGrid() {
@@ -349,12 +351,7 @@ public class Printing {
 			//otherwise, start in a new line
 			calcXPos(0, false);
 				
-		}	
-		
-		motorY.rotate(5 * 360);
-
-		
-		
+		}			
 	}
 	
 	private static void printLetter(char a) {

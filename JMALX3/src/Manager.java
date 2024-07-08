@@ -1,3 +1,9 @@
+//leren strings rausnehem
+//display verbessern
+//beenden
+
+//handbuch schreiben
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,9 +75,13 @@ public class Manager {
 	
     public static void main(String[] args) {
     	
-    	starWarsMelody();
+    	
+    	//starWarsMelody();
     	
     	Printing.initialize();
+		MorseInput.clearOurDisplay(8);
+		
+		Printing.newLine(2);
     	
     	while(true) {
     		boolean modus = modusSelection();
@@ -85,10 +95,11 @@ public class Manager {
     	    	MorseInput.GetInput();
     	    	
     	       	MorseInput.clearOurDisplay(8);
+
     	       	
-    	        Printing.startPrinting(MorseInput.normalWordArray);
+    	        Printing.startPrinting(deleateEmptyStrings(MorseInput.normalWordArray));
     	        
-    	        Printing.newLine(1);
+    	        Printing.newLine(1); //TODO: immer 1?
     	        
     		}else {
     			//music
@@ -100,12 +111,17 @@ public class Manager {
     		
     		boolean endPrinting = endPrinting();
     		if(endPrinting){
-    			//motorY.rotate(5 * 360);
+    			Printing.motorY.rotate(5 * 360);
     			return;
     		}
     		
     		Delay.msDelay(500);
-
+    		
+    		//reset lists
+    		MorseInput.morseLetter = "";
+    		MorseInput.normalWordArray = new ArrayList<String>();
+    		MorseInput.normalWord= "";
+    		
     	//play startmelody
 		//idea 1: implement every single note for melody
 		//idea 2: find a 10sec long melody in wav or mp3 format
@@ -165,5 +181,14 @@ public class Manager {
     	Sound.playTone(notes[1], 1500, 10);
     }
 
+    private static List<String> deleateEmptyStrings(List<String> arr){
+    	List<String> clearedArr = new ArrayList<String>();
+    	
+    	for (String s: arr) {
+    		if (s.length() > 0)
+    			clearedArr.add(s);
+    	}
+    	return clearedArr;
+    }
 
 }
