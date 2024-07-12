@@ -41,12 +41,6 @@ public class SignPrint extends Printing{
 		x0();
 
 	}
-	
-	
-
-	public static void spaceBetween() {
-		straight("left", 2* unit);
-	}
 
 	public static void printNote() {
 		setPen();

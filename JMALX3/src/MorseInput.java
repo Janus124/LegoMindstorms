@@ -30,7 +30,7 @@ public class MorseInput {
     }
     
 	//gets the input from the EV3 Touch Sensor and computes the duration of the time, when the sensor is pushed or paused 
-    public static void GetInput() {
+    public static void getInput() {
         long start_press;
         long finish_press;
 

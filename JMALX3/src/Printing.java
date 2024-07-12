@@ -18,7 +18,7 @@ import lejos.robotics.ColorAdapter;
 public class Printing {
 	
 	//XCounter for new line
-	static volatile int xCounter;
+	static int xCounter;
 	
 	//-------------
 	//Music Printing
@@ -28,6 +28,9 @@ public class Printing {
 	private static int notesInLine = 0;
 	private static final int MaxNotesInLine = 15;
 	
+	public static void spaceBetween() {
+		straight("left", 2* unit);
+	}
 	
 	public static void startPrintingNotes(List<String> notes) {
 		
@@ -55,6 +58,7 @@ public class Printing {
 			newLineNotes(1);
 			SignPrint.musicGrid();
 			SignPrint.spaceBetween();
+			notesInLine = 0;
 		}
 		
 		switch(note) {
@@ -549,7 +553,7 @@ public class Printing {
 		}
 
 	}
-	
+
 	
 }
 

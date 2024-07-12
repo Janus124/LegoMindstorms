@@ -28,13 +28,12 @@ public class MusicInput {
 		while(true) {
 			//red 0 = c, green 1 = d, blue 2 = e, yellow 3 = f, , white 6 = g, black 7 = a, brown = 13
 			int color = Manager.musicInputAdapter.getColorID();
-			System.out.println(color);
 			
 			if(color == 0 || color == 1 || color == 2 || color == 3 || color == 6 || color == 7 || color == 13) {
 				String note = noteList[color];
 				int selection = askForConsent(note);
 				if(selection == 0) {
-					Manager.musicLetterArray.add(note);
+					musicLetterArray.add(note);
 				} else if(selection == 2) {
 					return;
 				}
@@ -42,8 +41,8 @@ public class MusicInput {
 			
 			Manager.clearOurDisplay(8);		
 			
-			for(int i = 0; i < Manager.musicLetterArray.size(); i++) {
-				System.out.print(Manager.musicLetterArray.get(i));
+			for(int i = 0; i < musicLetterArray.size(); i++) {
+				System.out.print(musicLetterArray.get(i));
 			}
 			
 			System.out.println();

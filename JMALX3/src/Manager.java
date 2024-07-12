@@ -22,7 +22,6 @@ public class Manager {
 	//variable for music notes
 	static EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S1);
 	static ColorAdapter musicInputAdapter = new ColorAdapter(colorSensor);
-	public static List<String> musicLetterArray = new ArrayList<String>();
 	
 	//variables for printing
 	public static EV3LargeRegulatedMotor motorX = new EV3LargeRegulatedMotor(MotorPort.A);
@@ -64,7 +63,7 @@ public class Manager {
     	    	System.out.println("Start morse code");
     	    	Sound.playTone(1175, 1000, 10);
 
-    	    	MorseInput.GetInput();
+    	    	MorseInput.getInput();
     	    	
     	       	clearOurDisplay(8);
 
@@ -76,7 +75,7 @@ public class Manager {
     		}else {
     			//music
         		MusicInput.readMusicInput();
-        		Printing.startPrintingNotes(musicLetterArray);   
+        		Printing.startPrintingNotes(MusicInput.musicLetterArray);   
         		
         		Printing.newLineNotes(1);
     		}
