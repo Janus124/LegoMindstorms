@@ -18,7 +18,7 @@ import lejos.robotics.ColorAdapter;
 
 public class MusicInput {
 
-	static String[] noteList = {"c", "d", "e", "f", " ", " ", "g", "a", " ", " ", " ", " ", " ", "h"};
+	private static String[] noteList = {"c", "d", "e", "f", " ", " ", "g", "a", " ", " ", " ", " ", " ", "h"};
 	
 	public static void readMusicInput() {
 		
@@ -51,7 +51,7 @@ public class MusicInput {
 
 	}
 	
-	static int askForConsent(String color) {
+	private static int askForConsent(String color) {
 		System.out.println("Add note: \"" + color + "\"?");
 		System.out.println("Left: YES");
 		System.out.println("Right: NO");
