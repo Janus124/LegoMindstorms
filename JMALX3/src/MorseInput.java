@@ -73,7 +73,7 @@ public class MorseInput {
         }
     }
     
-    //gets a String of "." and "-", translates and adds the morse word to the normalWord array
+    //gets a String of "." and "-", translates and adds the morse word to the normalWord array(the final one)
     //retuns 0 when morsing should be ended
     private static int translateAndAddToNormalWord(String letter) {
     	letter = translate(letter);
@@ -84,7 +84,7 @@ public class MorseInput {
     	return 1;
     }
    
-    
+    //handles the Pause, the translation and saving
     private static int handlePause(long time) {
     	/*
     	0-2 sec 	= pause zwischen Morsezeichen
@@ -130,6 +130,7 @@ public class MorseInput {
        return 1;
     }
    
+    //handles the Press, adds "." or "-" to currend Word (morseLetter)
     private static int handlePress(long time) {
     	//Handle Press
     	/*
@@ -168,6 +169,7 @@ public class MorseInput {
         }
     }
 
+    //saves the currend word 
     private static void saveWordToArray() {
     	//add word to final array
     	if(normalWord.length() > 0) {
