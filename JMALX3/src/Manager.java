@@ -7,6 +7,7 @@ import java.util.List;
 import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3ColorSensor;
@@ -24,6 +25,22 @@ public class Manager {
 	public static List<String> musicLetterArray = new ArrayList<String>();
 	
 	//variables for printing
+	public static EV3LargeRegulatedMotor motorX = new EV3LargeRegulatedMotor(MotorPort.A);
+	public static EV3LargeRegulatedMotor motorY = new EV3LargeRegulatedMotor(MotorPort.B);
+	public static EV3MediumRegulatedMotor motorZ = new EV3MediumRegulatedMotor(MotorPort.C);
+	
+	//to calibrate pen in zero-position on x-axis
+	static EV3TouchSensor paperTouchSensor = new EV3TouchSensor(SensorPort.S4);
+	static TouchAdapter penAdapter = new TouchAdapter(paperTouchSensor);
+	
+	//Feed sheet into printer until it is not covering the sensor anymore, then reach start position
+	static EV3ColorSensor paperSensor = new EV3ColorSensor(SensorPort.S2);
+	static ColorAdapter paperVisibleAdapter = new ColorAdapter(paperSensor);
+	
+    // Create and initialize the touch sensor
+    static EV3TouchSensor morseTouchSensor = new EV3TouchSensor(SensorPort.S3);
+    static TouchAdapter adapter = new TouchAdapter(morseTouchSensor);
+	
 	
 	//music
     static int[] notes = {262, 294, 330, 349, 392, 440, 494, 
@@ -36,11 +53,11 @@ public class Manager {
     	starWarsMelody();
     	
     	Printing.initialize();
-		MorseInput.clearOurDisplay(8);
+		clearOurDisplay(8);
     	
     	while(true) {
     		boolean modus = modusSelection();
-    		MorseInput.clearOurDisplay(8);
+    		clearOurDisplay(8);
     		
     		if(modus) {
     			//morsen
@@ -49,7 +66,7 @@ public class Manager {
 
     	    	MorseInput.GetInput();
     	    	
-    	       	MorseInput.clearOurDisplay(8);
+    	       	clearOurDisplay(8);
 
     	       	
     	        Printing.startPrinting(deleteEmptyStrings(MorseInput.normalWordArray));
@@ -66,7 +83,7 @@ public class Manager {
     		
     		boolean endPrinting = endPrinting();
     		if(endPrinting){
-    			Printing.motorY.rotate(5 * 360);
+    			motorY.rotate(5 * 360);
     			return;
     		}
     		
@@ -139,6 +156,13 @@ public class Manager {
     			clearedArr.add(s);
     	}
     	return clearedArr;
+    }
+    
+    public static void clearOurDisplay(int num) {
+    	
+    	for(int i = 0; i < num; i++) {
+        	System.out.println("");
+    	}
     }
 
 }

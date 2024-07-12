@@ -17,33 +17,19 @@ import lejos.robotics.ColorAdapter;
 
 public class Printing {
 	
-	public static EV3LargeRegulatedMotor motorX = new EV3LargeRegulatedMotor(MotorPort.A);
-	public static EV3LargeRegulatedMotor motorY = new EV3LargeRegulatedMotor(MotorPort.B);
-	public static EV3MediumRegulatedMotor motorZ = new EV3MediumRegulatedMotor(MotorPort.C);
-	
-	//to calibrate pen in zero-position on x-axis
-	static EV3TouchSensor touchSensor = new EV3TouchSensor(SensorPort.S4);
-	static TouchAdapter penAdapter = new TouchAdapter(touchSensor);
-	
-	//Feed sheet into printer until it is not covering the sensor anymore, then reach start position
-	static EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S2);
-	static ColorAdapter paperVisibleAdapter = new ColorAdapter(colorSensor);
-	
 	//XCounter for new line
 	static volatile int xCounter;
-	
 	
 	//-------------
 	//Music Printing
 	
-	static final int linelenght = 1200;
-	static final int unit = 40;
-	static int notesInLine = 0;
-	static final int MaxNotesInLine = 15;
+	private static final int linelenght = 1200;
+	private static final int unit = 40;
+	private static int notesInLine = 0;
+	private static final int MaxNotesInLine = 15;
 	
 	//endet links unten (wo auch angefangen wird)(wenn blatt im drucker rechts oben)
-	static final void musicGrid() {
-		
+	private static final void musicGrid() {
 		//1
 		setPen();
 		straight("left", 1200);
@@ -84,10 +70,8 @@ public class Printing {
 	private static void spaceBetween() {
 		straight("left", 2* unit);
 	}
-	
-	
+
 	private static void printNote() {
-		
 		setPen();
 		straight("right", unit);
 		straight("up", unit);
@@ -151,8 +135,7 @@ public class Printing {
 		printNote();
 		straight("up", 100);
 	}
-	
-	
+		
 	public static void startPrintingNotes(List<String> notes) {
 		
 		//initialisieren
@@ -218,22 +201,22 @@ public class Printing {
 			straight("up", 220);	//normales newLine ist 180
 		}
 		
-		motorX.forward();
+		Manager.motorX.forward();
 		
 		while(true) {
-			if(penAdapter.isPressed()) {
-				motorX.stop();
+			if(Manager.penAdapter.isPressed()) {
+				Manager.motorX.stop();
 				break;
 			}
 		}		
 	}
 	
 	private static void x0() {
-		motorX.forward();
+		Manager.motorX.forward();
 		
 		while(true) {
-			if(penAdapter.isPressed()) {
-				motorX.stop();
+			if(Manager.penAdapter.isPressed()) {
+				Manager.motorX.stop();
 				break;
 			}
 		}		
@@ -249,8 +232,8 @@ public class Printing {
 	public static void initialize() {
 		//-------- SYNC MOTOR X and Y -------- //
 		
-		EV3LargeRegulatedMotor[] syncList = {motorX};
-		motorY.synchronizeWith(syncList);
+		EV3LargeRegulatedMotor[] syncList = {Manager.motorX};
+		Manager.motorY.synchronizeWith(syncList);
 		
 		//-------- START FEEDING SHEET INTO PRINTER -------- //
 		
@@ -262,33 +245,33 @@ public class Printing {
 			
 			//sheet is fed well into printer, start reaching start position
 			if(Button.ENTER.isDown()) {
-				motorY.stop();
+				Manager.motorY.stop();
 				break;
 			}
 			
 			//move paper backwards
 			if(Button.UP.isDown()) {
-				motorY.forward();
+				Manager.motorY.forward();
 				Delay.msDelay(1000);
 			}
 			
 			//move paper forward
 			if(Button.DOWN.isDown()) {
-				motorY.backward();
+				Manager.motorY.backward();
 				Delay.msDelay(1000);
 			}
 			
 		}
 		
 		// -------- START REACHING START POSITION -------- //
-		motorY.forward();
+		Manager.motorY.forward();
 		
 		while(true) {
 			
-			int i = paperVisibleAdapter.getColorID();
+			int i = Manager.paperVisibleAdapter.getColorID();
 			
 			if(i <= 2 || i >= 7) {
-				motorY.stop();
+				Manager.motorY.stop();
 				break;
 			}
 		}
@@ -297,23 +280,23 @@ public class Printing {
 		
 		//Gehe auf richtige Höhe bei Initializierung
 		//Move sheet backwards
-		motorY.rotate(180);
+		Manager.motorY.rotate(180);
 		Delay.msDelay(300);
 		
 		//Move to the right
-		motorX.forward();
+		Manager.motorX.forward();
 		
 		while(true) {
-			if(penAdapter.isPressed()) {
-				motorX.stop();
+			if(Manager.penAdapter.isPressed()) {
+				Manager.motorX.stop();
 				break;
 			}
 		}
 
 		// -------- STOP MOTOR -------- //
 		
-		motorY.stop();
-		motorX.stop();
+		Manager.motorY.stop();
+		Manager.motorX.stop();
 	}
 	
 	public static void startPrinting(List<String> words) {
@@ -321,7 +304,7 @@ public class Printing {
 		
 		//set position to first lower left corner
 		//stift nach hinten
-		motorY.rotate(-90);
+		Manager.motorY.rotate(-90);
 		
 		
 		// ----------- START READING INPUT --------- //
@@ -543,11 +526,11 @@ public class Printing {
 			straight("up", 180);	
 		}
 		
-		motorX.forward();
+		Manager.motorX.forward();
 		
 		while(true) {
-			if(penAdapter.isPressed()) {
-				motorX.stop();
+			if(Manager.penAdapter.isPressed()) {
+				Manager.motorX.stop();
 				break;
 			}
 		}
@@ -592,13 +575,13 @@ public class Printing {
 	}
 	
 	private static void setPen() {
-		motorZ.rotate(180);
-		motorZ.stop();
+		Manager.motorZ.rotate(180);
+		Manager.motorZ.stop();
 	}
 	
 	public static void liftPen() {
-		motorZ.rotate(-180);
-		motorZ.stop();
+		Manager.motorZ.rotate(-180);
+		Manager.motorZ.stop();
 	}
 	
 	private static void diagonal(String lowerCorner, String upperCorner, String direction, int degree) {
@@ -623,35 +606,35 @@ public class Printing {
 		
 		if(direction == "up") {
 			if(lowerCorner == "Right" && upperCorner == "Left") {
-				motorY.startSynchronization();
+				Manager.motorY.startSynchronization();
 				//stift nach hinten
-				motorY.rotate(-degree);
+				Manager.motorY.rotate(-degree);
 				//stift nach links
-				motorX.rotate(-degree);
-				motorY.endSynchronization();
+				Manager.motorX.rotate(-degree);
+				Manager.motorY.endSynchronization();
 			} else if (lowerCorner == "Left" && upperCorner == "Right") {
-				motorY.startSynchronization();
+				Manager.motorY.startSynchronization();
 				//stift nach hinten
-				motorY.rotate(-degree);
+				Manager.motorY.rotate(-degree);
 				//stift nach rechts
-				motorX.rotate(degree);
-				motorY.endSynchronization();
+				Manager.motorX.rotate(degree);
+				Manager.motorY.endSynchronization();
 			}
 		} else if (direction == "down"){
 			if(upperCorner == "Left" && lowerCorner == "Right") {
-				motorY.startSynchronization();
+				Manager.motorY.startSynchronization();
 				//stift nach vorne
-				motorY.rotate(degree);
+				Manager.motorY.rotate(degree);
 				//stift nach rechts
-				motorX.rotate(degree);
-				motorY.endSynchronization();
+				Manager.motorX.rotate(degree);
+				Manager.motorY.endSynchronization();
 			} else if (upperCorner == "Right" && lowerCorner == "Left") {
-				motorY.startSynchronization();
+				Manager.motorY.startSynchronization();
 				//stift nach vorne
-				motorY.rotate(degree);
+				Manager.motorY.rotate(degree);
 				//stift nach links
-				motorX.rotate(-degree);
-				motorY.endSynchronization();
+				Manager.motorX.rotate(-degree);
+				Manager.motorY.endSynchronization();
 			}
 		}
 		
@@ -668,13 +651,13 @@ public class Printing {
 		}
 		
 		if(direction == "up") {
-			motorY.rotate(-degree);
+			Manager.motorY.rotate(-degree);
 		} else if(direction == "down") {
-			motorY.rotate(degree);
+			Manager.motorY.rotate(degree);
 		} else if(direction == "right") {
-			motorX.rotate(degree);
+			Manager.motorX.rotate(degree);
 		} else if(direction == "left") {
-			motorX.rotate(-degree);
+			Manager.motorX.rotate(-degree);
 		}
 
 	}

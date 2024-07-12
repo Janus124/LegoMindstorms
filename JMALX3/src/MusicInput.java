@@ -17,6 +17,9 @@ import lejos.robotics.Color;
 import lejos.robotics.ColorAdapter;
 
 public class MusicInput {
+	
+	//variable for saving the notes
+	public static List<String> musicLetterArray = new ArrayList<String>();
 
 	private static String[] noteList = {"c", "d", "e", "f", " ", " ", "g", "a", " ", " ", " ", " ", " ", "h"};
 	
@@ -37,7 +40,7 @@ public class MusicInput {
 				}
 			}
 			
-			MorseInput.clearOurDisplay(8);		
+			Manager.clearOurDisplay(8);		
 			
 			for(int i = 0; i < Manager.musicLetterArray.size(); i++) {
 				System.out.print(Manager.musicLetterArray.get(i));
