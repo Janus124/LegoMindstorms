@@ -46,7 +46,7 @@ public class MorseInput {
                 // Calculate pause duration (can only be calculated here)
                 finish_pause = System.currentTimeMillis();
                 long time_pause = finish_pause - start_pause;
-                if(HandleInput("pause", time_pause) == 0) {
+                if(handleInput("pause", time_pause) == 0) {
                 	//pause is calculated, call HandleInput
                 	return;
                 }
@@ -65,7 +65,7 @@ public class MorseInput {
                 
                 // Calculate pressed duration
                 long time_pressed = finish_press - start_press;
-                if(HandleInput("pressed", time_pressed) == 0) {
+                if(handleInput("pressed", time_pressed) == 0) {
                 	return;
                 }
                 start_pause = System.currentTimeMillis();
@@ -85,7 +85,7 @@ public class MorseInput {
     }
    
     
-    private static int HandlePause(long time) {
+    private static int handlePause(long time) {
     	/*
     	0-2 sec 	= pause zwischen Morsezeichen
     	2-4 sec		= pause zwischen Buchstaben
@@ -130,7 +130,7 @@ public class MorseInput {
        return 1;
     }
    
-    private static int HandlePress(long time) {
+    private static int handlePress(long time) {
     	//Handle Press
     	/*
     	0-1 sec 	= kurz
@@ -155,13 +155,13 @@ public class MorseInput {
     //-1 error
     //0 end
     //1 continue
-    private static int HandleInput(String type, long time) {
+    private static int handleInput(String type, long time) {
     	
     	if (type.equals("pause")) {
-    		return HandlePause(time);
+    		return handlePause(time);
     		
         } else if (type.equals("pressed")) {
-        	return HandlePress(time);
+        	return handlePress(time);
  
         } else {
             return -1;
@@ -170,7 +170,9 @@ public class MorseInput {
 
     private static void saveWordToArray() {
     	//add word to final array
-        normalWordArray.add(normalWord);
+    	if(normalWord.length() > 0) {
+            normalWordArray.add(normalWord);
+    	}
     }
     
     private static String translate(String letter) {

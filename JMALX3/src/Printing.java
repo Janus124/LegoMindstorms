@@ -29,7 +29,7 @@ public class Printing {
 	private static final int MaxNotesInLine = 15;
 	
 	//endet links unten (wo auch angefangen wird)(wenn blatt im drucker rechts oben)
-	private static final void musicGrid() {
+	private static void musicGrid() {
 		//1
 		setPen();
 		straight("left", 1200);
@@ -223,11 +223,6 @@ public class Printing {
 	}
 	//---------------
 	
-	
-	
-	/*TODO:
-	 * 4. Schnittstelle Testlauf
-	*/
 	
 	public static void initialize() {
 		//-------- SYNC MOTOR X and Y -------- //
@@ -579,7 +574,7 @@ public class Printing {
 		Manager.motorZ.stop();
 	}
 	
-	public static void liftPen() {
+	private static void liftPen() {
 		Manager.motorZ.rotate(-180);
 		Manager.motorZ.stop();
 	}
