@@ -228,6 +228,8 @@ public class MorseInput {
             normalWordArray.add(normalWord);
     	}
     	
+    	normalWordArray = deleteEmptyStrings(normalWordArray);
+    	
     }
     
     private static List<String> deleteEmptyStrings(List<String> arr){

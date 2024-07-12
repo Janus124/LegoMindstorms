@@ -69,7 +69,7 @@ public class Manager {
     	       	clearOurDisplay(8);
 
     	       	
-    	        Printing.startPrinting(deleteEmptyStrings(MorseInput.normalWordArray));
+    	        Printing.startPrinting(MorseInput.normalWordArray);
     	        
     	        Printing.newLine(1);
     	        
@@ -146,16 +146,6 @@ public class Manager {
     	Sound.playTone(notes[2], 167, 10);
     	Sound.playTone(notes[3], 167, 10);
     	Sound.playTone(notes[1], 1500, 10);
-    }
-
-    private static List<String> deleteEmptyStrings(List<String> arr){
-    	List<String> clearedArr = new ArrayList<String>();
-    	
-    	for (String s: arr) {
-    		if (s.length() > 0)
-    			clearedArr.add(s);
-    	}
-    	return clearedArr;
     }
     
     public static void clearOurDisplay(int num) {
